@@ -1,0 +1,331 @@
+/* KAISAPAISA GLOBAL DESIGN SYSTEM */
+:root {
+  /* Core Color System */
+  --bg-main: #F5F5F2;
+  --surface-white: #FFFFFF;
+  --surface-secondary: #FAFAF8;
+  --text-primary: #202522;
+  --text-secondary: #69716C;
+  --text-muted: #9BA29D;
+  --border-color: #E4E6E2;
+  --border-hover: #D1D4CD;
+
+  /* Pastel Accents */
+  --pastel-sage: #A8C3B0;       /* Income, Savings, Positive */
+  --pastel-blue: #A9BDD2;       /* Analytics, Neutral Info */
+  --pastel-lavender: #C3B8D8;   /* Goals, Secondary */
+  --pastel-peach: #E8B7A6;      /* Expenses, Warnings */
+  --pastel-yellow: #E7D99B;     /* Budgets, Reminders */
+
+  /* Semantic UI State Colors */
+  --color-income: #2E7D32;
+  --bg-income-light: #E8F5E9;
+  --color-expense: #C62828;
+  --bg-expense-light: #FFEBEE;
+  --color-warning: #D84315;
+  --bg-warning-light: #FBE9E7;
+  --color-exceeded: #B71C1C;
+
+  /* Geometry & Radii */
+  --radius-input: 8px;
+  --radius-btn: 8px;
+  --radius-card: 12px;
+  --radius-modal: 14px;
+  --radius-badge: 20px;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+
+  /* Transitions */
+  --transition-fast: all 180ms ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum"; /* Tabular numerals for monetary alignment */
+}
+
+/* Layout System */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Header & Typography */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Cards & Panels */
+.kp-card {
+  background-color: var(--surface-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow: var(--shadow-subtle);
+  transition: var(--transition-fast);
+}
+
+.kp-card:hover {
+  border-color: var(--border-hover);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-family);
+  border-radius: var(--radius-btn);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--text-primary);
+  color: var(--surface-white);
+}
+
+.btn-primary:hover {
+  background-color: #000000;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-danger {
+  background-color: var(--bg-expense-light);
+  color: var(--color-expense);
+  border-color: #FFCDD2;
+}
+
+.btn-danger:hover {
+  background-color: #FFCDD2;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+/* Form Controls */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background-color: var(--surface-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-input);
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(32, 37, 34, 0.08);
+}
+
+/* Table Styling */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.kp-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.kp-table th {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--surface-secondary);
+}
+
+.kp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.kp-table tbody tr:hover {
+  background-color: var(--surface-secondary);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-badge);
+}
+
+.badge-income {
+  background-color: var(--bg-income-light);
+  color: var(--color-income);
+}
+
+.badge-expense {
+  background-color: var(--bg-expense-light);
+  color: var(--color-expense);
+}
+
+.badge-warning {
+  background-color: var(--bg-warning-light);
+  color: var(--color-warning);
+}
+
+.badge-normal {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+
+.badge-exceeded {
+  background-color: #FFEBEE;
+  color: #C62828;
+}
+
+.badge-coming-soon {
+  background-color: #EDE7F6;
+  color: #512DA8;
+  font-weight: 600;
+}
+
+/* Progress Bars */
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 300ms ease-in-out;
+}
+
+.fill-normal {
+  background-color: var(--pastel-sage);
+}
+
+.fill-warning {
+  background-color: var(--pastel-peach);
+}
+
+.fill-exceeded {
+  background-color: var(--color-expense);
+}
+
+/* Modal Backdrop */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(32, 37, 34, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-card {
+  background-color: var(--surface-white);
+  border-radius: var(--radius-modal);
+  width: 100%;
+  max-width: 520px;
+  padding: 28px;
+  box-shadow: var(--shadow-modal);
+  animation: modalEnter 200ms ease-out;
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile Responsive System */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+    padding-bottom: 80px; /* space for bottom navigation */
+  }
+}
