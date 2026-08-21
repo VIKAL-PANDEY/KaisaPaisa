@@ -53,10 +53,6 @@ import { catchError, of } from 'rxjs';
           </button>
         </form>
 
-        <div class="demo-hint">
-          <strong>Demo:</strong> student&#64;kaisapaisa.com / Password123
-        </div>
-
         <div class="auth-footer">
           Don't have an account? <a routerLink="/register" class="auth-link">Create an account</a>
         </div>
@@ -157,16 +153,6 @@ import { catchError, of } from 'rxjs';
       font-size: 13px;
       margin-bottom: 20px;
       border: 1px solid #FFCDD2;
-    }
-
-    .demo-hint {
-      margin-top: 16px;
-      background: #EDE7F6;
-      color: #512DA8;
-      font-size: 12px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      text-align: center;
     }
   `]
 })
