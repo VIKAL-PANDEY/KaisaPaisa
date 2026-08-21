@@ -1,0 +1,10 @@
+{
+  "name": "kaisapaisa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KAISAPAISA - Personal Finance Management Web Application",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm start"
+  }
+}
