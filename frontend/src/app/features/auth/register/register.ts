@@ -42,7 +42,7 @@ import { catchError, of } from 'rxjs';
               [(ngModel)]="email"
               name="email"
               class="form-control"
-              placeholder="student@kaisapaisa.com"
+              placeholder="vpand301@gmail.com"
               required
               autocomplete="email"
             >
@@ -193,7 +193,11 @@ export class RegisterComponent {
     this.authService.register({ name: this.name, email: this.email, password: this.password })
       .pipe(catchError(err => {
         this.loading.set(false);
-        this.errorMessage.set(err.error?.message || 'Registration failed. Try a different email.');
+        if (err.status === 0) {
+          this.errorMessage.set('Unable to connect to server. Please check your backend API is running.');
+        } else {
+          this.errorMessage.set(err.error?.message || err.message || 'Registration failed.');
+        }
         return of(null);
       }))
       .subscribe(res => {
