@@ -21,22 +21,16 @@ const app = express();
 
 // Security Headers
 app.use(helmet({
-  contentSecurityPolicy: false, // Allows flexible API development in local dev mode
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
-// Restricted CORS
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:4200';
+// Permissive CORS for local & production Vercel deployments
 app.use(cors({
-  origin: [
-    clientUrl,
-    'http://localhost:4200',
-    'http://127.0.0.1:4200',
-    'http://localhost:4201',
-    'http://127.0.0.1:4201',
-    'http://localhost:4202',
-    'http://127.0.0.1:4202'
-  ],
+  origin: (origin, callback) => {
+    // Allow all origins (local dev, Vercel, mobile, staging)
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
