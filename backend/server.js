@@ -2,7 +2,7 @@ require('dotenv').config();
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
 // Connect to MongoDB (with in-memory fallback & auto-seeding)

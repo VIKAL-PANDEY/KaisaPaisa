@@ -97,10 +97,17 @@ const createTransaction = async (req, res, next) => {
       isRecurring
     } = req.body;
 
+    let finalCategoryId = categoryId;
     let finalCategoryName = categoryName || 'Other';
     if (categoryId) {
       const cat = await Category.findById(categoryId);
       if (cat) finalCategoryName = cat.name;
+    } else {
+      const defaultCat = await Category.findOne({ type: type || 'expense' });
+      if (defaultCat) {
+        finalCategoryId = defaultCat._id;
+        finalCategoryName = defaultCat.name;
+      }
     }
 
     let finalAccountName = accountName || 'Default Account';
@@ -113,7 +120,7 @@ const createTransaction = async (req, res, next) => {
       userId,
       type,
       amount: parseFloat(amount),
-      categoryId,
+      categoryId: finalCategoryId,
       categoryName: finalCategoryName,
       accountId: accountId || null,
       accountName: finalAccountName,

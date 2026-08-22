@@ -211,20 +211,59 @@ const autoSeedIfEmpty = async () => {
   }
 };
 
+let mongoServerInstance = null;
+
 const connectDB = async () => {
-  mongoose.set('bufferCommands', false);
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
 
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/kaisapaisa';
+  // 1. Try connecting to specified MONGODB_URI if present
+  if (process.env.MONGODB_URI) {
+    try {
+      const conn = await mongoose.connect(process.env.MONGODB_URI, {
+        serverSelectionTimeoutMS: 3000
+      });
+      console.log(`[MongoDB] Connected to external MongoDB host: ${conn.connection.host}`);
+      await autoSeedIfEmpty();
+      return conn;
+    } catch (error) {
+      console.warn(`[MongoDB] Could not connect to external URI (${error.message}). Falling back to in-memory instance...`);
+    }
+  }
 
+  // 2. Try default local Mongo daemon if available
   try {
-    const conn = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 2000
+    const conn = await mongoose.connect('mongodb://127.0.0.1:27017/kaisapaisa', {
+      serverSelectionTimeoutMS: 1000
     });
-    console.log(`[MongoDB] Connected to host: ${conn.connection.host}`);
+    console.log(`[MongoDB] Connected to local MongoDB host: ${conn.connection.host}`);
     await autoSeedIfEmpty();
+    return conn;
+  } catch (err) {
+    // Local standard daemon not running, proceed to memory server
+  }
+
+  // 3. Fallback to high-performance MongoDB Memory Server instance
+  try {
+    let MongoMemoryServer;
+    try {
+      MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
+    } catch (e) {
+      MongoMemoryServer = require('../../../node_modules/mongodb-memory-server').MongoMemoryServer;
+    }
+
+    if (!mongoServerInstance) {
+      mongoServerInstance = await MongoMemoryServer.create();
+    }
+    const memUri = mongoServerInstance.getUri();
+    const conn = await mongoose.connect(memUri);
+    console.log(`[MongoDB] Connected to MongoMemoryServer at ${memUri}`);
+    await autoSeedIfEmpty();
+    return conn;
   } catch (error) {
-    console.warn(`[MongoDB] Could not connect to ${uri}: ${error.message}`);
-    console.log('[MongoDB] Running in offline demo mode. API routes will operate safely.');
+    console.error('[MongoDB Critical Error] Failed to initialize database:', error);
+    throw error;
   }
 };
 

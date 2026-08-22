@@ -10,6 +10,8 @@ export interface User {
   currency: string;
   currencySymbol: string;
   timezone: string;
+  avatarUrl?: string;
+  authProvider?: 'local' | 'google';
 }
 
 export interface AuthResponse {
@@ -42,6 +44,20 @@ export class AuthService {
     return !!this.token();
   }
 
+  getGoogleConfig() {
+    return this.api.get<{ clientId: string }>('auth/google-config');
+  }
+
+  googleLogin(payload: { credential?: string; profile?: { name?: string; email: string; googleId?: string; picture?: string } }) {
+    return this.api.post<AuthResponse>('auth/google', payload).pipe(
+      tap(res => {
+        if (res.success && res.token && res.user) {
+          this.setSession(res.token, res.user);
+        }
+      })
+    );
+  }
+
   login(credentials: { email: string; password: string }) {
     return this.api.post<AuthResponse>('auth/login', credentials).pipe(
       tap(res => {
@@ -63,7 +79,16 @@ export class AuthService {
   }
 
   logout() {
-    this.api.post('auth/logout', {}).subscribe();
+    try {
+      this.api.post('auth/logout', {}).pipe(
+        catchError(() => of(null))
+      ).subscribe({
+        next: () => {},
+        error: () => {}
+      });
+    } catch {
+      // Ignore network errors during client cleanup
+    }
     localStorage.removeItem('kp_token');
     localStorage.removeItem('kp_user');
     this.token.set(null);

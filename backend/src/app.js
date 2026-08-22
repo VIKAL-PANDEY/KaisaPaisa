@@ -21,6 +21,9 @@ const reportRoutes = require('./routes/reportRoutes');
 
 const app = express();
 
+// Trust reverse proxy (Cloud Run / Nginx)
+app.set('trust proxy', 1);
+
 // Security Headers
 app.use(
   helmet({

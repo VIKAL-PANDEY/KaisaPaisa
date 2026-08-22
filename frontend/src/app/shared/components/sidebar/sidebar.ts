@@ -10,10 +10,10 @@ import { AuthService } from '../../../core/services/auth.service';
   template: `
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo-box">KP</div>
+        <img src="/kaisapaisa-logo.png" alt="KaisaPaisa" class="sidebar-logo-img">
         <div>
           <h2 class="brand-title">KAISAPAISA</h2>
-          <p class="brand-tagline">Control your spending</p>
+          <p class="brand-tagline">Smart Finance Platform</p>
         </div>
       </div>
 
@@ -70,7 +70,11 @@ import { AuthService } from '../../../core/services/auth.service';
 
       <div class="sidebar-footer">
         <div class="user-info">
-          <div class="avatar">{{ userInitials() }}</div>
+          @if (user()?.avatarUrl) {
+            <img [src]="user()?.avatarUrl" class="avatar avatar-img" alt="avatar" />
+          } @else {
+            <div class="avatar">{{ userInitials() }}</div>
+          }
           <div class="user-details">
             <span class="user-name">{{ user()?.name || 'User' }}</span>
             <span class="user-email">{{ user()?.email }}</span>
@@ -104,17 +108,14 @@ import { AuthService } from '../../../core/services/auth.service';
       margin-bottom: 20px;
     }
 
-    .logo-box {
-      width: 36px;
-      height: 36px;
-      background-color: var(--text-primary);
-      color: var(--surface-white);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 14px;
+    .sidebar-logo-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 9px;
+      background-color: #FFFFFF;
+      padding: 2px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
 
     .brand-title {
@@ -209,6 +210,11 @@ import { AuthService } from '../../../core/services/auth.service';
       justify-content: center;
       font-size: 12px;
       font-weight: 700;
+    }
+
+    .avatar-img {
+      object-fit: cover;
+      border: 1px solid var(--border-color);
     }
 
     .user-details {

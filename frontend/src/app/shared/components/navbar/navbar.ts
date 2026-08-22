@@ -12,6 +12,7 @@ import { catchError, of } from 'rxjs';
   template: `
     <header class="top-nav">
       <div class="top-left">
+        <img src="/kaisapaisa-logo.png" alt="KaisaPaisa" class="app-mobile-logo-img">
         <span class="app-mobile-logo">KAISAPAISA</span>
       </div>
 
@@ -58,6 +59,20 @@ import { catchError, of } from 'rxjs';
       position: relative;
     }
 
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .app-mobile-logo-img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 6px;
+      display: none;
+    }
+
     .app-mobile-logo {
       font-weight: 800;
       font-size: 16px;
@@ -66,7 +81,7 @@ import { catchError, of } from 'rxjs';
     }
 
     @media (max-width: 768px) {
-      .app-mobile-logo { display: block; }
+      .app-mobile-logo, .app-mobile-logo-img { display: block; }
     }
 
     .top-actions {

@@ -2,7 +2,7 @@ require('dotenv').config();
 const app = require('./backend/src/app');
 const connectDB = require('./backend/src/config/db');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
 // Connect to MongoDB asynchronously without blocking server start

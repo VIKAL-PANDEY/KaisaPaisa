@@ -18,7 +18,21 @@ const userSchema = new mongoose.Schema({
   },
   passwordHash: {
     type: String,
-    required: [true, 'Password is required']
+    required: false
+  },
+  googleId: {
+    type: String,
+    sparse: true
+  },
+  avatarUrl: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
   },
   currency: {
     type: String,
