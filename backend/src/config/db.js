@@ -214,29 +214,17 @@ const autoSeedIfEmpty = async () => {
 const connectDB = async () => {
   mongoose.set('bufferCommands', false);
 
-  if (process.env.MONGODB_URI) {
-    try {
-      const conn = await mongoose.connect(process.env.MONGODB_URI, {
-        serverSelectionTimeoutMS: 3000
-      });
-      console.log(`[MongoDB] Connected to host: ${conn.connection.host}`);
-      await autoSeedIfEmpty();
-      return;
-    } catch (error) {
-      console.warn(`[MongoDB] Could not connect to MONGODB_URI: ${error.message}`);
-    }
-  }
+  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/kaisapaisa';
 
-  // Fallback to in-memory MongoDB
   try {
-    const { MongoMemoryServer } = require('mongodb-memory-server');
-    const mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
-    const conn = await mongoose.connect(uri);
-    console.log(`[MongoDB] In-Memory Mongo server active at: ${uri}`);
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 2000
+    });
+    console.log(`[MongoDB] Connected to host: ${conn.connection.host}`);
     await autoSeedIfEmpty();
   } catch (error) {
-    console.warn('[MongoDB] In-memory server fallback failed:', error.message);
+    console.warn(`[MongoDB] Could not connect to ${uri}: ${error.message}`);
+    console.log('[MongoDB] Running in offline demo mode. API routes will operate safely.');
   }
 };
 

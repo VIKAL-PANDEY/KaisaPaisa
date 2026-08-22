@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
+const fs = require('fs');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -97,18 +98,35 @@ app.use('/api', (req, res) => {
   });
 });
 
-// Serve frontend static build
-const frontendDist = path.resolve(__dirname, '../../frontend/dist/frontend/browser');
+// Locate compiled frontend static build
+const findFrontendDist = () => {
+  const possiblePaths = [
+    path.resolve(__dirname, '../../frontend/dist/frontend/browser'),
+    path.resolve(__dirname, '../../frontend/dist/frontend'),
+    path.resolve(process.cwd(), 'frontend/dist/frontend/browser'),
+    path.resolve(process.cwd(), 'frontend/dist/frontend'),
+    path.resolve(process.cwd(), 'dist/frontend/browser'),
+    path.resolve(process.cwd(), 'dist/frontend')
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
+      return p;
+    }
+  }
+  return possiblePaths[0];
+};
+
+const frontendDist = findFrontendDist();
 app.use(express.static(frontendDist));
 
 // Single Page Application Fallback for Angular routes
 app.use((req, res, next) => {
   if (req.method === 'GET') {
-    return res.sendFile(path.join(frontendDist, 'index.html'), (err) => {
-      if (err) {
-        res.status(200).send('<html><body><h2>KAISAPAISA is starting up...</h2><p>Please refresh in a moment once the build finishes.</p></body></html>');
-      }
-    });
+    const indexPath = path.join(frontendDist, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
+    return res.status(200).send('<html><body><h2>KAISAPAISA is starting up...</h2><p>Please refresh in a moment once the build finishes.</p></body></html>');
   }
   next();
 });

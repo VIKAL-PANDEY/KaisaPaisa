@@ -4,13 +4,14 @@ import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterModule } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
+import { BudgetTrackerComponent } from '../../shared/components/budget-tracker/budget-tracker';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, BudgetTrackerComponent],
   template: `
     <div class="dashboard-page">
       <!-- Header -->
@@ -100,34 +101,12 @@ Chart.register(...registerables);
               <a routerLink="/budgets" class="btn btn-secondary btn-sm">Set your first budget</a>
             </div>
 
-            <div class="budget-list">
-              <div *ngFor="let b of activeBudgets()" class="budget-item">
-                <div class="bi-header">
-                  <span class="bi-title">{{ b.period | uppercase }} {{ b.categoryName ? '• ' + b.categoryName : '' }}</span>
-                  <span class="bi-values">₹{{ b.spentAmount | number:'1.0-0' }} / ₹{{ b.limitAmount | number:'1.0-0' }}</span>
-                </div>
-
-                <div class="progress-bar-bg">
-                  <div 
-                    class="progress-bar-fill" 
-                    [style.width.%]="b.utilizationPercentage > 100 ? 100 : b.utilizationPercentage"
-                    [class.fill-normal]="b.status === 'NORMAL'"
-                    [class.fill-warning]="b.status === 'WARNING'"
-                    [class.fill-exceeded]="b.status === 'EXCEEDED'"
-                  ></div>
-                </div>
-
-                <div class="bi-footer">
-                  <span class="badge" 
-                    [class.badge-normal]="b.status === 'NORMAL'"
-                    [class.badge-warning]="b.status === 'WARNING'"
-                    [class.badge-exceeded]="b.status === 'EXCEEDED'"
-                  >
-                    {{ b.status }} ({{ b.utilizationPercentage }}%)
-                  </span>
-                  <span class="bi-rem">₹{{ b.remainingAmount | number:'1.0-0' }} remaining</span>
-                </div>
-              </div>
+            <div class="budget-list" id="dashboard-active-budgets-list">
+              <app-budget-tracker
+                *ngFor="let b of activeBudgets()"
+                [budget]="b"
+                [compact]="true"
+              ></app-budget-tracker>
             </div>
           </div>
 
