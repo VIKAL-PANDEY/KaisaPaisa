@@ -51,6 +51,10 @@ import { catchError, of } from 'rxjs';
           <button type="submit" [disabled]="loading()" class="btn btn-primary btn-full">
             {{ loading() ? 'Signing in...' : 'Sign In' }}
           </button>
+
+          <button type="button" (click)="fillDemoCredentials()" class="btn btn-secondary btn-full" style="margin-top: 8px;">
+            Fill Demo Account (student&#64;kaisapaisa.com)
+          </button>
         </form>
 
         <div class="auth-footer">
@@ -164,6 +168,11 @@ export class LoginComponent {
   password = '';
   loading = signal(false);
   errorMessage = signal('');
+
+  fillDemoCredentials() {
+    this.email = 'student@kaisapaisa.com';
+    this.password = 'Password123';
+  }
 
   onSubmit() {
     if (!this.email || !this.password) {

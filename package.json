@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "KAISAPAISA - Personal Finance Management Web Application",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd backend && npm start"
+    "dev": "npm run build --workspace=frontend && node backend/server.js",
+    "build": "npm run build --workspace=frontend",
+    "start": "node backend/server.js"
   }
 }
