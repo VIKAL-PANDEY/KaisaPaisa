@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -12,7 +13,7 @@ import { ApiService } from '../../core/services/api.service';
     <div class="settings-page">
       <div class="page-header">
         <h1 class="page-title">Profile & Settings</h1>
-        <p class="page-subtitle">Manage your personal details, default currency, and alert preferences.</p>
+        <p class="page-subtitle">Manage your personal details, theme appearance, default currency, and alert preferences.</p>
       </div>
 
       <div *ngIf="successMsg()" class="alert alert-success">
@@ -36,6 +37,34 @@ import { ApiService } from '../../core/services/api.service';
 
             <button type="submit" class="btn btn-primary btn-sm">Update Profile</button>
           </form>
+        </div>
+
+        <!-- Appearance & Theme Preferences -->
+        <div class="kp-card">
+          <h3>Appearance & Theme</h3>
+          <p class="desc">Default theme is light mode, or switch to dark mode at any time.</p>
+          
+          <div class="theme-options-grid mt-3">
+            <div 
+              class="theme-card-option" 
+              [class.selected]="!themeService.isDarkMode()"
+              (click)="themeService.setTheme('light')"
+            >
+              <div class="theme-icon-lg">☀️</div>
+              <div class="theme-opt-title">Light Mode</div>
+              <div class="theme-opt-desc">Default clean high-contrast fintech aesthetic</div>
+            </div>
+
+            <div 
+              class="theme-card-option" 
+              [class.selected]="themeService.isDarkMode()"
+              (click)="themeService.setTheme('dark')"
+            >
+              <div class="theme-icon-lg">🌙</div>
+              <div class="theme-opt-title">Dark Mode</div>
+              <div class="theme-opt-desc">Dark fintech glassmorphic appearance</div>
+            </div>
+          </div>
         </div>
 
         <!-- Regional & Currency Preferences -->
@@ -105,6 +134,50 @@ import { ApiService } from '../../core/services/api.service';
 
     .desc { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
 
+    .theme-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .theme-card-option {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-card);
+      padding: 14px;
+      cursor: pointer;
+      background: var(--surface-secondary);
+      transition: var(--transition-fast);
+      text-align: center;
+    }
+
+    .theme-card-option:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-elevated);
+    }
+
+    .theme-card-option.selected {
+      border-color: var(--color-primary);
+      background: var(--color-primary-subtle);
+      box-shadow: 0 0 0 1px var(--color-primary);
+    }
+
+    .theme-icon-lg {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .theme-opt-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .theme-opt-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
     .toggle-list { display: flex; flex-direction: column; gap: 16px; }
 
     .toggle-item {
@@ -113,11 +186,18 @@ import { ApiService } from '../../core/services/api.service';
       gap: 12px;
       padding: 12px;
       background-color: var(--surface-secondary);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       cursor: pointer;
+      transition: var(--transition-fast);
     }
 
-    .ti-title { font-size: 14px; font-weight: 600; }
+    .toggle-item:hover {
+      background-color: var(--surface-elevated);
+      border-color: var(--border-hover);
+    }
+
+    .ti-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
     .ti-desc { font-size: 12.5px; color: var(--text-secondary); }
 
     .alert-success {
@@ -132,6 +212,7 @@ import { ApiService } from '../../core/services/api.service';
 export class ProfileSettingsComponent implements OnInit {
   private authService = inject(AuthService);
   private api = inject(ApiService);
+  themeService = inject(ThemeService);
 
   user = this.authService.currentUser;
   successMsg = signal('');

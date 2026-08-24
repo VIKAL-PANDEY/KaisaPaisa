@@ -98,6 +98,7 @@ import { ApiService } from '../../core/services/api.service';
     .month-label {
       font-size: 15px;
       font-weight: 700;
+      color: var(--text-primary);
     }
 
     .calendar-grid-card {
@@ -124,7 +125,8 @@ import { ApiService } from '../../core/services/api.service';
 
     .day-cell {
       min-height: 80px;
-      background-color: var(--surface-secondary);
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 8px;
       cursor: pointer;
@@ -135,22 +137,25 @@ import { ApiService } from '../../core/services/api.service';
     }
 
     .day-cell:hover {
-      background-color: #ECEFF1;
+      background-color: rgba(255, 255, 255, 0.07);
+      border-color: var(--border-hover);
     }
 
     .day-cell.selected {
-      border: 2px solid var(--text-primary);
-      background-color: #FFFFFF;
+      border: 2px solid var(--color-soft-blue);
+      background-color: rgba(151, 185, 255, 0.1);
     }
 
     .day-cell.blank {
       background: transparent;
+      border: none;
       cursor: default;
     }
 
     .day-number {
       font-size: 13px;
       font-weight: 600;
+      color: var(--text-primary);
     }
 
     .day-totals {
@@ -162,8 +167,9 @@ import { ApiService } from '../../core/services/api.service';
     .inc-badge {
       font-size: 10px;
       font-weight: 700;
-      color: #2E7D32;
-      background-color: #E8F5E9;
+      color: var(--color-soft-blue);
+      background-color: var(--bg-income-light);
+      border: 1px solid rgba(151, 185, 255, 0.2);
       padding: 1px 4px;
       border-radius: 4px;
     }
@@ -171,8 +177,9 @@ import { ApiService } from '../../core/services/api.service';
     .exp-badge {
       font-size: 10px;
       font-weight: 700;
-      color: #C62828;
-      background-color: #FFEBEE;
+      color: var(--color-expense);
+      background-color: var(--bg-expense-light);
+      border: 1px solid rgba(229, 115, 115, 0.2);
       padding: 1px 4px;
       border-radius: 4px;
     }
@@ -190,13 +197,14 @@ import { ApiService } from '../../core/services/api.service';
       margin-bottom: 16px;
     }
 
-    .detail-header h3 { font-size: 16px; }
+    .detail-header h3 { font-size: 16px; color: var(--text-primary); }
 
     .total-tag {
       font-size: 13px;
       font-weight: 700;
       color: var(--color-expense);
       background-color: var(--bg-expense-light);
+      border: 1px solid rgba(229, 115, 115, 0.2);
       padding: 4px 10px;
       border-radius: 12px;
     }
@@ -217,16 +225,17 @@ import { ApiService } from '../../core/services/api.service';
       align-items: center;
       justify-content: space-between;
       padding: 10px 14px;
-      background-color: var(--surface-secondary);
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
     }
 
     .tx-main { display: flex; align-items: center; gap: 10px; }
-    .tx-name { font-size: 13.5px; font-weight: 600; }
+    .tx-name { font-size: 13.5px; font-weight: 600; color: var(--text-primary); }
     .tx-amt { font-size: 14px; font-weight: 700; }
 
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
+    .text-sage { color: var(--color-soft-blue); }
+    .text-peach { color: var(--color-expense); }
   `]
 })
 export class CalendarComponent implements OnInit {

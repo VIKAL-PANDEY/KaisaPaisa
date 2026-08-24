@@ -4,11 +4,13 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent)
+    loadComponent: () => import('./features/auth/auth-form/auth-form').then(m => m.AuthFormComponent),
+    data: { mode: 'login' }
   },
   {
     path: 'register',
-    loadComponent: () => import('./features/auth/register/register').then(m => m.RegisterComponent)
+    loadComponent: () => import('./features/auth/auth-form/auth-form').then(m => m.AuthFormComponent),
+    data: { mode: 'register' }
   },
   {
     path: 'dashboard',
@@ -59,11 +61,6 @@ export const routes: Routes = [
     path: 'settings',
     canActivate: [authGuard],
     loadComponent: () => import('./features/profile-settings/profile-settings').then(m => m.ProfileSettingsComponent)
-  },
-  {
-    path: 'coming-soon/:feature',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/coming-soon-view/coming-soon-view').then(m => m.ComingSoonViewComponent)
   },
   {
     path: '',

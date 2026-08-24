@@ -1,8 +1,10 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
+import { TransactionEventService } from '../../core/services/transaction-event.service';
 import { BudgetTrackerComponent } from '../../shared/components/budget-tracker/budget-tracker';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-budgets',
@@ -116,8 +118,10 @@ import { BudgetTrackerComponent } from '../../shared/components/budget-tracker/b
     .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
   `]
 })
-export class BudgetsComponent implements OnInit {
+export class BudgetsComponent implements OnInit, OnDestroy {
   private api = inject(ApiService);
+  private txEvents = inject(TransactionEventService);
+  private sub?: Subscription;
 
   budgets = signal<any[]>([]);
   categories = signal<any[]>([]);
@@ -133,6 +137,15 @@ export class BudgetsComponent implements OnInit {
   ngOnInit() {
     this.loadCategories();
     this.loadBudgets();
+
+    // Auto-update budget progress when transactions change
+    this.sub = this.txEvents.transactionUpdated$.subscribe(() => {
+      this.loadBudgets();
+    });
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
   }
 
   loadCategories() {
@@ -170,6 +183,7 @@ export class BudgetsComponent implements OnInit {
       next: () => {
         this.closeModal();
         this.loadBudgets();
+        this.txEvents.notifyBudgetUpdated();
       }
     });
   }
@@ -177,7 +191,10 @@ export class BudgetsComponent implements OnInit {
   deleteBudget(id: string) {
     if (confirm('Delete this budget setting?')) {
       this.api.delete(`budgets/${id}`).subscribe({
-        next: () => this.loadBudgets()
+        next: () => {
+          this.loadBudgets();
+          this.txEvents.notifyBudgetUpdated();
+        }
       });
     }
   }

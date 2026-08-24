@@ -212,58 +212,94 @@ const autoSeedIfEmpty = async () => {
 };
 
 let mongoServerInstance = null;
+let connectionPromise = null;
 
 const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }
 
-  // 1. Try connecting to specified MONGODB_URI if present
-  if (process.env.MONGODB_URI) {
+  if (connectionPromise) {
+    return connectionPromise;
+  }
+
+  connectionPromise = (async () => {
+    // 1. Try connecting to specified MONGODB_URI / MONGO_URI / DATABASE_URL if present
+    const externalUri = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DATABASE_URL;
+    if (externalUri && externalUri.trim()) {
+      try {
+        console.log('[MongoDB] Attempting to connect to configured MongoDB URI...');
+        const conn = await mongoose.connect(externalUri.trim(), {
+          serverSelectionTimeoutMS: 3500,
+          connectTimeoutMS: 4000,
+          socketTimeoutMS: 30000,
+          maxPoolSize: 10,
+          minPoolSize: 1,
+          retryWrites: true
+        });
+        console.log(`[MongoDB] Connected successfully to host: ${conn.connection.host}`);
+        await autoSeedIfEmpty();
+        return conn;
+      } catch (error) {
+        console.warn(`[MongoDB Atlas Notice] Could not connect to external URI (${error.message}).`);
+        console.warn('[MongoDB Atlas Notice] If using MongoDB Atlas, ensure your cluster IP Access List allows connections (e.g. 0.0.0.0/0 in Atlas Network Access).');
+        console.warn('[MongoDB] Falling back to high-performance local/in-memory database instance...');
+        // Disconnect any stale or half-open connection before fallback
+        try {
+          await mongoose.disconnect();
+        } catch (_) {}
+      }
+    }
+
+    // 2. Try default local Mongo daemon if available
     try {
-      const conn = await mongoose.connect(process.env.MONGODB_URI, {
-        serverSelectionTimeoutMS: 3000
+      const conn = await mongoose.connect('mongodb://127.0.0.1:27017/kaisapaisa', {
+        serverSelectionTimeoutMS: 1200,
+        connectTimeoutMS: 1500
       });
-      console.log(`[MongoDB] Connected to external MongoDB host: ${conn.connection.host}`);
+      console.log(`[MongoDB] Connected to local MongoDB host: ${conn.connection.host}`);
+      await autoSeedIfEmpty();
+      return conn;
+    } catch (err) {
+      // Local daemon not running, proceed to memory server
+      try {
+        await mongoose.disconnect();
+      } catch (_) {}
+    }
+
+    // 3. Fallback to MongoDB Memory Server instance
+    try {
+      let MongoMemoryServer;
+      try {
+        MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
+      } catch (e) {
+        MongoMemoryServer = require('../../../node_modules/mongodb-memory-server').MongoMemoryServer;
+      }
+
+      if (!mongoServerInstance) {
+        console.log('[MongoDB] Initializing MongoMemoryServer...');
+        mongoServerInstance = await MongoMemoryServer.create();
+      }
+      const memUri = mongoServerInstance.getUri();
+      const conn = await mongoose.connect(memUri, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 5000
+      });
+      console.log(`[MongoDB] Connected to MongoMemoryServer at ${memUri}`);
       await autoSeedIfEmpty();
       return conn;
     } catch (error) {
-      console.warn(`[MongoDB] Could not connect to external URI (${error.message}). Falling back to in-memory instance...`);
+      console.error('[MongoDB Critical Error] Failed to initialize database instance:', error.message);
+      throw error;
     }
-  }
+  })();
 
-  // 2. Try default local Mongo daemon if available
   try {
-    const conn = await mongoose.connect('mongodb://127.0.0.1:27017/kaisapaisa', {
-      serverSelectionTimeoutMS: 1000
-    });
-    console.log(`[MongoDB] Connected to local MongoDB host: ${conn.connection.host}`);
-    await autoSeedIfEmpty();
-    return conn;
+    const result = await connectionPromise;
+    return result;
   } catch (err) {
-    // Local standard daemon not running, proceed to memory server
-  }
-
-  // 3. Fallback to high-performance MongoDB Memory Server instance
-  try {
-    let MongoMemoryServer;
-    try {
-      MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer;
-    } catch (e) {
-      MongoMemoryServer = require('../../../node_modules/mongodb-memory-server').MongoMemoryServer;
-    }
-
-    if (!mongoServerInstance) {
-      mongoServerInstance = await MongoMemoryServer.create();
-    }
-    const memUri = mongoServerInstance.getUri();
-    const conn = await mongoose.connect(memUri);
-    console.log(`[MongoDB] Connected to MongoMemoryServer at ${memUri}`);
-    await autoSeedIfEmpty();
-    return conn;
-  } catch (error) {
-    console.error('[MongoDB Critical Error] Failed to initialize database:', error);
-    throw error;
+    connectionPromise = null;
+    throw err;
   }
 };
 

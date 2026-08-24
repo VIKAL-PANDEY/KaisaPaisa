@@ -1,10 +1,12 @@
-import { Component, inject, signal, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
+import { TransactionEventService } from '../../core/services/transaction-event.service';
 import { RouterModule } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { BudgetTrackerComponent } from '../../shared/components/budget-tracker/budget-tracker';
+import { Subscription } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -163,13 +165,14 @@ Chart.register(...registerables);
     }
 
     .month-badge {
-      background-color: var(--surface-white);
+      background-color: var(--surface-secondary);
       border: 1px solid var(--border-color);
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 13px;
       font-weight: 600;
       color: var(--text-secondary);
+      backdrop-filter: var(--glass-blur);
     }
 
     .summary-grid {
@@ -184,9 +187,9 @@ Chart.register(...registerables);
       justify-content: space-between;
     }
 
-    .border-sage { border-left: 4px solid var(--pastel-sage); }
-    .border-peach { border-left: 4px solid var(--pastel-peach); }
-    .border-blue { border-left: 4px solid var(--pastel-blue); }
+    .border-sage { border-left: 4px solid var(--color-income); }
+    .border-peach { border-left: 4px solid var(--color-expense); }
+    .border-blue { border-left: 4px solid var(--color-primary); }
 
     .stat-label {
       font-size: 12.5px;
@@ -198,6 +201,7 @@ Chart.register(...registerables);
       font-size: 26px;
       font-weight: 700;
       letter-spacing: -0.02em;
+      color: var(--text-primary);
       margin: 8px 0;
     }
 
@@ -206,8 +210,8 @@ Chart.register(...registerables);
       color: var(--text-muted);
     }
 
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
+    .text-sage { color: var(--color-income); }
+    .text-peach { color: var(--color-expense); }
 
     .charts-grid {
       display: grid;
@@ -228,6 +232,7 @@ Chart.register(...registerables);
 
     .card-header h3 {
       font-size: 16px;
+      color: var(--text-primary);
     }
 
     .card-subtitle {
@@ -262,9 +267,13 @@ Chart.register(...registerables);
 
     .link-sm {
       font-size: 13px;
-      color: var(--text-primary);
+      color: var(--color-soft-blue);
       font-weight: 600;
       text-decoration: none;
+    }
+
+    .link-sm:hover {
+      text-decoration: underline;
     }
 
     .empty-state-sm {
@@ -279,23 +288,6 @@ Chart.register(...registerables);
       flex-direction: column;
       gap: 16px;
     }
-
-    .budget-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .bi-header, .bi-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-    }
-
-    .bi-title { font-weight: 600; }
-    .bi-values { font-weight: 500; color: var(--text-secondary); }
-    .bi-rem { font-size: 12px; color: var(--text-muted); }
 
     .transaction-list {
       display: flex;
@@ -317,6 +309,7 @@ Chart.register(...registerables);
     .tx-merchant {
       font-size: 14px;
       font-weight: 600;
+      color: var(--text-primary);
     }
 
     .tx-cat-date {
@@ -336,6 +329,7 @@ Chart.register(...registerables);
 
     .insights-section h3 {
       font-size: 16px;
+      color: var(--text-primary);
       margin-bottom: 14px;
     }
 
@@ -346,13 +340,14 @@ Chart.register(...registerables);
     }
 
     .insight-card {
-      background-color: var(--surface-secondary);
-      border-left: 3.5px solid var(--pastel-yellow);
+      background: var(--surface-secondary);
+      border-left: 3.5px solid var(--color-soft-blue);
     }
 
     .ic-title {
       font-weight: 600;
       font-size: 14px;
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
 
@@ -369,7 +364,8 @@ Chart.register(...registerables);
 
     .skeleton-card {
       height: 100px;
-      background-color: var(--surface-white);
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius-card);
       animation: pulse 1.2s infinite ease-in-out;
     }
@@ -381,9 +377,11 @@ Chart.register(...registerables);
     }
   `]
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   private api = inject(ApiService);
   private authService = inject(AuthService);
+  private txEvents = inject(TransactionEventService);
+  private txSub?: Subscription;
 
   @ViewChild('trendCanvas') trendCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('categoryCanvas') categoryCanvas!: ElementRef<HTMLCanvasElement>;
@@ -408,10 +406,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadDashboardData();
+
+    // Reactively refresh dashboard charts, summary totals, and active budgets on any transaction/budget event
+    this.txSub = this.txEvents.transactionUpdated$.subscribe(() => {
+      this.loadDashboardData();
+    });
   }
 
   ngAfterViewInit() {
-    // Canvas initialized after view
+    setTimeout(() => this.renderCharts(), 100);
+  }
+
+  ngOnDestroy() {
+    this.txSub?.unsubscribe();
+    if (this.trendChart) this.trendChart.destroy();
+    if (this.categoryChart) this.categoryChart.destroy();
   }
 
   loadDashboardData() {
@@ -466,13 +475,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             {
               label: 'Income',
               data: incomeVals,
-              backgroundColor: '#A8C3B0',
+              backgroundColor: '#97B9FF',
               borderRadius: 4
             },
             {
               label: 'Expenses',
               data: expenseVals,
-              backgroundColor: '#E8B7A6',
+              backgroundColor: '#262262',
               borderRadius: 4
             }
           ]
@@ -480,10 +489,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { position: 'top' } },
+          plugins: { 
+            legend: { 
+              position: 'top',
+              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 12 } }
+            } 
+          },
           scales: {
-            x: { grid: { display: false } },
-            y: { grid: { color: '#E4E6E2' } }
+            x: { 
+              grid: { display: false },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            },
+            y: { 
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            }
           }
         }
       });
@@ -500,15 +520,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           labels,
           datasets: [{
             data: dataVals,
-            backgroundColor: ['#E8B7A6', '#A9BDD2', '#C3B8D8', '#E7D99B', '#A8C3B0', '#69716C'],
+            backgroundColor: ['#262262', '#97B9FF', '#4B45A1', '#6B6B6B', '#38337F', '#7E9CD8'],
             borderWidth: 2,
-            borderColor: '#FFFFFF'
+            borderColor: '#141414'
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { position: 'right' } }
+          plugins: { 
+            legend: { 
+              position: 'right',
+              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 11 }, boxWidth: 12 }
+            } 
+          }
         }
       });
     }

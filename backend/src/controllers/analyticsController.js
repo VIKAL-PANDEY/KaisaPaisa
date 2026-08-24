@@ -1,27 +1,36 @@
+const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
 const Budget = require('../models/Budget');
 const Account = require('../models/Account');
 const { calculateBudgetProgress } = require('../services/budgetEngine');
 const { generateFinancialInsights } = require('../services/insightEngine');
 
+const getUserMatchCondition = (userId) => {
+  if (mongoose.Types.ObjectId.isValid(userId)) {
+    return { $in: [new mongoose.Types.ObjectId(userId), userId] };
+  }
+  return userId;
+};
+
 // @desc    Get complete dashboard overview & financial summary
 // @route   GET /api/analytics/dashboard
 const getDashboardOverview = async (req, res, next) => {
   try {
     const userId = req.user.id;
+    const userMatch = getUserMatchCondition(userId);
     const now = new Date();
     
     // Month bounds
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
     // Prev month bounds
     const startOfPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const endOfPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+    const endOfPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
 
     // 1. Current Month Totals
     const currentTotals = await Transaction.aggregate([
-      { $match: { userId, date: { $gte: startOfMonth, $lte: endOfMonth } } },
+      { $match: { userId: userMatch, date: { $gte: startOfMonth, $lte: endOfMonth } } },
       { $group: { _id: '$type', total: { $sum: '$amount' } } }
     ]);
 
@@ -34,7 +43,7 @@ const getDashboardOverview = async (req, res, next) => {
 
     // 2. Previous Month Totals for Trends
     const prevTotals = await Transaction.aggregate([
-      { $match: { userId, date: { $gte: startOfPrevMonth, $lte: endOfPrevMonth } } },
+      { $match: { userId: userMatch, date: { $gte: startOfPrevMonth, $lte: endOfPrevMonth } } },
       { $group: { _id: '$type', total: { $sum: '$amount' } } }
     ]);
 
@@ -57,7 +66,7 @@ const getDashboardOverview = async (req, res, next) => {
     let totalInitialBalance = accounts.reduce((acc, a) => acc + (a.initialBalance || 0), 0);
 
     const allTimeTotals = await Transaction.aggregate([
-      { $match: { userId } },
+      { $match: { userId: userMatch } },
       { $group: { _id: '$type', total: { $sum: '$amount' } } }
     ]);
 
@@ -72,7 +81,7 @@ const getDashboardOverview = async (req, res, next) => {
 
     // Category Breakdown for current month
     const categoryBreakdown = await Transaction.aggregate([
-      { $match: { userId, type: 'expense', date: { $gte: startOfMonth, $lte: endOfMonth } } },
+      { $match: { userId: userMatch, type: 'expense', date: { $gte: startOfMonth, $lte: endOfMonth } } },
       { $group: { _id: '$categoryName', total: { $sum: '$amount' } } },
       { $sort: { total: -1 } }
     ]);
@@ -124,6 +133,7 @@ const getDashboardOverview = async (req, res, next) => {
 const getTrends = async (req, res, next) => {
   try {
     const userId = req.user.id;
+    const userMatch = getUserMatchCondition(userId);
     const months = [];
     const now = new Date();
 
@@ -131,10 +141,10 @@ const getTrends = async (req, res, next) => {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const label = d.toLocaleString('en-US', { month: 'short' });
       const start = new Date(d.getFullYear(), d.getMonth(), 1);
-      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
 
       const monthTotals = await Transaction.aggregate([
-        { $match: { userId, date: { $gte: start, $lte: end } } },
+        { $match: { userId: userMatch, date: { $gte: start, $lte: end } } },
         { $group: { _id: '$type', total: { $sum: '$amount' } } }
       ]);
 

@@ -19,17 +19,6 @@ import { ApiService } from '../../core/services/api.service';
         </button>
       </div>
 
-      <!-- Group Splitting Coming Soon Banner -->
-      <div class="group-split-banner kp-card">
-        <div class="gs-left">
-          <span class="gs-icon">🔒</span>
-          <div>
-            <div class="gs-title">Group Expense Splitting — <span class="badge badge-coming-soon">COMING SOON</span></div>
-            <p class="gs-desc">Splitwise-style group bills and automated tab calculations are planned for Post-MVP Expansion.</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Summary Stats -->
       <div class="summary-grid">
         <div class="stat-card kp-card border-sage">
@@ -167,22 +156,6 @@ import { ApiService } from '../../core/services/api.service';
       justify-content: space-between;
     }
 
-    .group-split-banner {
-      background-color: var(--surface-secondary);
-      border-left: 4px solid var(--pastel-lavender);
-      padding: 16px 20px;
-    }
-
-    .gs-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .gs-icon { font-size: 20px; }
-    .gs-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
-    .gs-desc { font-size: 12.5px; color: var(--text-secondary); }
-
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -190,16 +163,16 @@ import { ApiService } from '../../core/services/api.service';
     }
 
     .stat-label { font-size: 12.5px; color: var(--text-secondary); }
-    .stat-value { font-size: 24px; font-weight: 700; margin: 6px 0; }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); margin: 6px 0; }
     .stat-subtext { font-size: 12px; color: var(--text-muted); }
 
-    .border-sage { border-left: 4px solid var(--pastel-sage); }
-    .border-peach { border-left: 4px solid var(--pastel-peach); }
-    .border-blue { border-left: 4px solid var(--pastel-blue); }
+    .border-sage { border-left: 4px solid var(--color-soft-blue); }
+    .border-peach { border-left: 4px solid var(--color-expense); }
+    .border-blue { border-left: 4px solid var(--color-primary); }
 
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
-    .font-bold { font-weight: 600; }
+    .text-sage { color: var(--color-soft-blue); }
+    .text-peach { color: var(--color-expense); }
+    .font-bold { font-weight: 600; color: var(--text-primary); }
     .text-right { text-align: right; }
     .text-muted { color: var(--text-secondary); font-size: 13px; }
 
@@ -210,9 +183,9 @@ import { ApiService } from '../../core/services/api.service';
       border-radius: 12px;
     }
 
-    .chip-pending { background-color: #FFF8E1; color: #F57F17; }
-    .chip-paid { background-color: #E8F5E9; color: #2E7D32; }
-    .chip-overdue { background-color: #FFEBEE; color: #C62828; }
+    .chip-pending { background-color: var(--bg-warning-light); color: var(--color-warning); border: 1px solid rgba(255, 183, 77, 0.2); }
+    .chip-paid { background-color: var(--bg-income-light); color: var(--color-income); border: 1px solid rgba(151, 185, 255, 0.2); }
+    .chip-overdue { background-color: var(--bg-expense-light); color: var(--color-expense); border: 1px solid rgba(229, 115, 115, 0.2); }
 
     .action-btn {
       background: none;

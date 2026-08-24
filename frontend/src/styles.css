@@ -1,30 +1,67 @@
-/* KAISAPAISA GLOBAL DESIGN SYSTEM */
-:root {
-  /* Core Color System */
-  --bg-main: #F5F5F2;
-  --surface-white: #FFFFFF;
-  --surface-secondary: #FAFAF8;
-  --text-primary: #202522;
-  --text-secondary: #69716C;
-  --text-muted: #9BA29D;
-  --border-color: #E4E6E2;
-  --border-hover: #D1D4CD;
+/* KAISAPAISA GLOBAL DESIGN SYSTEM - LIGHT & DARK FINTECH GLASSMORPHISM */
 
-  /* Pastel Accents */
-  --pastel-sage: #A8C3B0;       /* Income, Savings, Positive */
-  --pastel-blue: #A9BDD2;       /* Analytics, Neutral Info */
-  --pastel-lavender: #C3B8D8;   /* Goals, Secondary */
-  --pastel-peach: #E8B7A6;      /* Expenses, Warnings */
-  --pastel-yellow: #E7D99B;     /* Budgets, Reminders */
+/* ==========================================================================
+   1. ROOT DESIGN TOKENS (LIGHT MODE DEFAULT)
+   ========================================================================== */
+:root {
+  /* Core Canvas & Surfaces */
+  --bg-main: #F4F6F9;
+  --bg-secondary: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --surface-white: #FFFFFF;
+  --surface-secondary: #EDF2F7;
+  --surface-elevated: #FFFFFF;
+
+  /* Typography */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+
+  /* Borders & Dividers */
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-hover: rgba(15, 23, 42, 0.16);
+  --border-strong: rgba(15, 23, 42, 0.14);
+
+  /* Brand Primary & Accents */
+  --color-primary: #262262;           /* Deep Royal Indigo */
+  --color-primary-hover: #1E1A52;     /* Darker Royal Indigo */
+  --color-primary-subtle: rgba(38, 34, 98, 0.08);
+  --color-soft-blue: #2563EB;         /* Vibrant Blue Accent */
+  --color-soft-blue-subtle: rgba(37, 99, 235, 0.10);
+  --color-neutral-grey: #64748B;
+
+  /* Financial Status Colors */
+  --pastel-sage: #16A34A;
+  --pastel-blue: #2563EB;
+  --pastel-lavender: #4F46E5;
+  --pastel-peach: #DC2626;
+  --pastel-yellow: #D97706;
 
   /* Semantic UI State Colors */
-  --color-income: #2E7D32;
-  --bg-income-light: #E8F5E9;
-  --color-expense: #C62828;
-  --bg-expense-light: #FFEBEE;
-  --color-warning: #D84315;
-  --bg-warning-light: #FBE9E7;
-  --color-exceeded: #B71C1C;
+  --color-income: #16A34A;
+  --bg-income-light: rgba(22, 163, 74, 0.10);
+  --color-expense: #DC2626;
+  --bg-expense-light: rgba(220, 38, 38, 0.10);
+  --color-warning: #D97706;
+  --bg-warning-light: rgba(217, 119, 6, 0.10);
+  --color-exceeded: #DC2626;
+
+  /* Glassmorphism & Depth Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-hover: rgba(255, 255, 255, 0.95);
+  --glass-border: 1px solid rgba(15, 23, 42, 0.08);
+  --glass-blur: blur(12px);
+  --glass-blur-strong: blur(18px);
+  --glass-sidebar-bg: rgba(255, 255, 255, 0.88);
+  --glass-modal-bg: #FFFFFF;
+
+  /* Inputs & Form Controls */
+  --form-control-bg: #FFFFFF;
+  --form-control-border: rgba(15, 23, 42, 0.14);
+  --form-control-text: #0F172A;
+  --form-control-placeholder: #94A3B8;
+  --select-option-bg: #FFFFFF;
+  --select-option-text: #0F172A;
 
   /* Geometry & Radii */
   --radius-input: 8px;
@@ -33,15 +70,88 @@
   --radius-modal: 14px;
   --radius-badge: 20px;
 
-  /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  /* Shadows */
+  --shadow-subtle: 0 4px 14px -2px rgba(15, 23, 42, 0.06);
+  --shadow-modal: 0 20px 45px -8px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.06);
 
-  /* Transitions */
-  --transition-fast: all 180ms ease;
+  /* Transitions & Font */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --transition-fast: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ==========================================================================
+   2. DARK FINTECH GLASSMORPHISM THEME TOKENS
+   ========================================================================== */
+[data-theme="dark"],
+.dark,
+body.dark-theme {
+  /* Core Canvas & Surfaces */
+  --bg-main: #141414;
+  --bg-secondary: #1C1C1C;
+  --bg-elevated: #242424;
+  --surface-white: rgba(255, 255, 255, 0.05);
+  --surface-secondary: rgba(255, 255, 255, 0.03);
+  --surface-elevated: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --text-primary: #FFFFFF;
+  --text-secondary: #A6A6A6;
+  --text-muted: #777777;
+
+  /* Borders & Dividers */
+  --border-color: rgba(255, 255, 255, 0.10);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Brand Primary & Accents */
+  --color-primary: #262262;           /* Deep Royal Purple */
+  --color-primary-hover: #363180;     /* Lighter Purple Hover */
+  --color-primary-subtle: rgba(38, 34, 98, 0.45);
+  --color-soft-blue: #97B9FF;         /* Slate Soft Blue Accent */
+  --color-soft-blue-subtle: rgba(151, 185, 255, 0.15);
+  --color-neutral-grey: #6B6B6B;
+
+  /* Financial Status Colors */
+  --pastel-sage: #97B9FF;
+  --pastel-blue: #97B9FF;
+  --pastel-lavender: #3B358C;
+  --pastel-peach: #E57373;
+  --pastel-yellow: #FFB74D;
+
+  /* Semantic UI State Colors */
+  --color-income: #97B9FF;
+  --bg-income-light: rgba(151, 185, 255, 0.12);
+  --color-expense: #E57373;
+  --bg-expense-light: rgba(229, 115, 115, 0.12);
+  --color-warning: #FFB74D;
+  --bg-warning-light: rgba(255, 183, 77, 0.12);
+  --color-exceeded: #EF5350;
+
+  /* Glassmorphism & Depth Tokens */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-hover: rgba(255, 255, 255, 0.07);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.10);
+  --glass-blur: blur(16px);
+  --glass-blur-strong: blur(20px);
+  --glass-sidebar-bg: rgba(20, 20, 20, 0.78);
+  --glass-modal-bg: rgba(24, 24, 24, 0.92);
+
+  /* Inputs & Form Controls */
+  --form-control-bg: rgba(255, 255, 255, 0.05);
+  --form-control-border: rgba(255, 255, 255, 0.12);
+  --form-control-text: #FFFFFF;
+  --form-control-placeholder: #666666;
+  --select-option-bg: #1C1C1C;
+  --select-option-text: #FFFFFF;
+
+  /* Shadows */
+  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 20px 40px -4px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.10);
+}
+
+/* ==========================================================================
+   3. BASE STYLES & RESET
+   ========================================================================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -51,10 +161,23 @@
 body {
   font-family: var(--font-family);
   background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(38, 34, 98, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(151, 185, 255, 0.06) 0%, transparent 45%);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: "tnum"; /* Tabular numerals for monetary alignment */
+  font-feature-settings: "tnum"; /* Tabular numerals for financial alignment */
+  min-height: 100vh;
+  transition: background-color 250ms ease, color 250ms ease;
+}
+
+[data-theme="dark"] body,
+body.dark-theme {
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(38, 34, 98, 0.22) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(151, 185, 255, 0.08) 0%, transparent 45%);
 }
 
 /* Layout System */
@@ -85,6 +208,7 @@ h1, h2, h3, h4 {
 .page-title {
   font-size: 26px;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .page-subtitle {
@@ -93,21 +217,28 @@ h1, h2, h3, h4 {
   margin-top: 4px;
 }
 
-/* Cards & Panels */
+/* ==========================================================================
+   4. CARDS & GLASSMORPHISM SURFACES
+   ========================================================================== */
 .kp-card {
-  background-color: var(--surface-white);
-  border: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  border: var(--glass-border);
   border-radius: var(--radius-card);
   padding: 24px;
   box-shadow: var(--shadow-subtle);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   transition: var(--transition-fast);
 }
 
 .kp-card:hover {
   border-color: var(--border-hover);
+  background: var(--glass-bg-hover);
 }
 
-/* Buttons */
+/* ==========================================================================
+   5. BUTTONS
+   ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -125,33 +256,39 @@ h1, h2, h3, h4 {
 }
 
 .btn-primary {
-  background-color: var(--text-primary);
-  color: var(--surface-white);
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border: 1px solid rgba(151, 185, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(38, 34, 98, 0.35);
 }
 
 .btn-primary:hover {
-  background-color: #000000;
+  background-color: var(--color-primary-hover);
+  border-color: rgba(151, 185, 255, 0.35);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background-color: var(--surface-secondary);
   color: var(--text-primary);
-  border-color: var(--border-color);
+  border: 1px solid var(--border-color);
+  backdrop-filter: var(--glass-blur);
 }
 
 .btn-secondary:hover {
-  background-color: var(--border-color);
+  background-color: var(--surface-elevated);
+  border-color: var(--border-hover);
 }
 
 .btn-danger {
   background-color: var(--bg-expense-light);
   color: var(--color-expense);
-  border-color: #FFCDD2;
+  border: 1px solid rgba(229, 115, 115, 0.25);
 }
 
 .btn-danger:hover {
-  background-color: #FFCDD2;
+  background-color: rgba(229, 115, 115, 0.20);
+  border-color: rgba(229, 115, 115, 0.40);
 }
 
 .btn-sm {
@@ -159,7 +296,9 @@ h1, h2, h3, h4 {
   font-size: 13px;
 }
 
-/* Form Controls */
+/* ==========================================================================
+   6. FORM CONTROLS & INPUTS
+   ========================================================================== */
 .form-group {
   margin-bottom: 18px;
 }
@@ -177,20 +316,59 @@ h1, h2, h3, h4 {
   padding: 10px 14px;
   font-size: 14px;
   font-family: var(--font-family);
-  color: var(--text-primary);
-  background-color: var(--surface-white);
-  border: 1px solid var(--border-color);
+  color: var(--form-control-text);
+  background-color: var(--form-control-bg);
+  border: 1px solid var(--form-control-border);
   border-radius: var(--radius-input);
   outline: none;
   transition: var(--transition-fast);
+  backdrop-filter: blur(8px);
+}
+
+select.form-control {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--form-control-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2397B9FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+  color: var(--form-control-text);
+}
+
+[data-theme="light"] select.form-control,
+body.light-theme select.form-control {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23262262' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+select.form-control option {
+  background-color: var(--select-option-bg);
+  color: var(--select-option-text);
+  padding: 8px 12px;
+}
+
+select.form-control option:hover,
+select.form-control option:checked {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.form-control::placeholder {
+  color: var(--form-control-placeholder);
 }
 
 .form-control:focus {
-  border-color: var(--text-primary);
-  box-shadow: 0 0 0 2px rgba(32, 37, 34, 0.08);
+  border-color: var(--color-soft-blue);
+  box-shadow: 0 0 0 2px var(--color-primary-subtle);
+  background-color: var(--form-control-bg);
 }
 
-/* Table Styling */
+/* ==========================================================================
+   7. TABLE STYLING
+   ========================================================================== */
 .table-responsive {
   overflow-x: auto;
 }
@@ -224,7 +402,9 @@ h1, h2, h3, h4 {
   background-color: var(--surface-secondary);
 }
 
-/* Badges */
+/* ==========================================================================
+   8. BADGES & CHIPS
+   ========================================================================== */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -232,44 +412,46 @@ h1, h2, h3, h4 {
   font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-badge);
+  border: 1px solid transparent;
 }
 
 .badge-income {
   background-color: var(--bg-income-light);
   color: var(--color-income);
+  border-color: rgba(22, 163, 74, 0.20);
 }
 
 .badge-expense {
   background-color: var(--bg-expense-light);
   color: var(--color-expense);
+  border-color: rgba(220, 38, 38, 0.20);
 }
 
 .badge-warning {
   background-color: var(--bg-warning-light);
   color: var(--color-warning);
+  border-color: rgba(217, 119, 6, 0.20);
 }
 
 .badge-normal {
-  background-color: #E8F5E9;
-  color: #2E7D32;
+  background-color: var(--bg-income-light);
+  color: var(--color-income);
+  border-color: rgba(22, 163, 74, 0.20);
 }
 
 .badge-exceeded {
-  background-color: #FFEBEE;
-  color: #C62828;
+  background-color: var(--bg-expense-light);
+  color: var(--color-expense);
+  border-color: rgba(220, 38, 38, 0.20);
 }
 
-.badge-coming-soon {
-  background-color: #EDE7F6;
-  color: #512DA8;
-  font-weight: 600;
-}
-
-/* Progress Bars */
+/* ==========================================================================
+   9. PROGRESS BARS
+   ========================================================================== */
 .progress-bar-bg {
   width: 100%;
   height: 8px;
-  background-color: var(--border-color);
+  background-color: var(--surface-secondary);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -281,40 +463,48 @@ h1, h2, h3, h4 {
 }
 
 .fill-normal {
-  background-color: var(--pastel-sage);
+  background-color: var(--color-primary);
+  background-image: linear-gradient(90deg, #262262 0%, #363180 100%);
 }
 
 .fill-warning {
-  background-color: var(--pastel-peach);
+  background-color: var(--color-warning);
 }
 
 .fill-exceeded {
   background-color: var(--color-expense);
 }
 
-/* Modal Backdrop */
+/* ==========================================================================
+   10. MODAL BACKDROP & DIALOGS
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(32, 37, 34, 0.4);
+  background-color: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-card {
-  background-color: var(--surface-white);
+  background: var(--glass-modal-bg);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-modal);
   width: 100%;
   max-width: 520px;
   padding: 28px;
   box-shadow: var(--shadow-modal);
+  backdrop-filter: var(--glass-blur-strong);
+  -webkit-backdrop-filter: var(--glass-blur-strong);
   animation: modalEnter 200ms ease-out;
+  color: var(--text-primary);
 }
 
 @keyframes modalEnter {
@@ -322,10 +512,14 @@ h1, h2, h3, h4 {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Mobile Responsive System */
+/* ==========================================================================
+   11. MOBILE RESPONSIVE
+   ========================================================================== */
 @media (max-width: 768px) {
   .main-content {
     padding: 16px;
-    padding-bottom: 80px; /* space for bottom navigation */
+    padding-bottom: 80px; /* space for mobile bottom nav */
   }
 }
+
+

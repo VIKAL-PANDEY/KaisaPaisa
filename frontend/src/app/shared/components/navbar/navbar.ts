@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import { RouterModule } from '@angular/router';
 import { catchError, of } from 'rxjs';
 
@@ -17,6 +18,22 @@ import { catchError, of } from 'rxjs';
       </div>
 
       <div class="top-actions">
+        <!-- Theme Mode Toggle Button -->
+        <button 
+          (click)="themeService.toggleTheme()" 
+          class="theme-toggle-btn"
+          [attr.aria-label]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+          [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        >
+          @if (themeService.isDarkMode()) {
+            <span class="theme-icon">☀️</span>
+            <span class="theme-label">Light</span>
+          } @else {
+            <span class="theme-icon">🌙</span>
+            <span class="theme-label">Dark</span>
+          }
+        </button>
+
         <button (click)="toggleNotifications()" class="notif-btn" title="Notifications">
           <span>🔔</span>
           @if (unreadCount() > 0) {
@@ -77,6 +94,7 @@ import { catchError, of } from 'rxjs';
       font-weight: 800;
       font-size: 16px;
       letter-spacing: -0.02em;
+      color: var(--text-primary);
       display: none;
     }
 
@@ -88,30 +106,67 @@ import { catchError, of } from 'rxjs';
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-left: auto;
+    }
+
+    .theme-toggle-btn {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-btn);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      transition: var(--transition-fast);
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--surface-elevated);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+
+    .theme-icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .theme-label {
+      font-size: 12px;
     }
 
     .notif-btn {
-      background: var(--surface-white);
+      background: var(--surface-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-btn);
       padding: 6px 14px;
       font-size: 13px;
       font-weight: 500;
+      color: var(--text-primary);
       cursor: pointer;
       position: relative;
       display: flex;
       align-items: center;
       gap: 6px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       transition: var(--transition-fast);
     }
 
     .notif-btn:hover {
-      background-color: var(--surface-secondary);
+      background-color: var(--surface-elevated);
+      border-color: var(--border-hover);
     }
 
     .notif-badge {
       background-color: var(--color-expense);
-      color: var(--surface-white);
+      color: #FFFFFF;
       font-size: 10px;
       font-weight: 700;
       padding: 1px 5px;
@@ -123,10 +178,12 @@ import { catchError, of } from 'rxjs';
       top: 50px;
       right: 0;
       width: 340px;
-      background: var(--surface-white);
+      background: var(--glass-modal-bg);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-card);
       box-shadow: var(--shadow-modal);
+      backdrop-filter: var(--glass-blur-strong);
+      -webkit-backdrop-filter: var(--glass-blur-strong);
       z-index: 99;
       padding: 16px;
     }
@@ -143,14 +200,20 @@ import { catchError, of } from 'rxjs';
     .nd-header h3 {
       font-size: 14px;
       font-weight: 600;
+      color: var(--text-primary);
     }
 
     .btn-text {
       background: none;
       border: none;
       font-size: 12px;
-      color: var(--text-secondary);
+      color: var(--color-soft-blue);
       cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-text:hover {
+      text-decoration: underline;
     }
 
     .nd-body {
@@ -165,16 +228,21 @@ import { catchError, of } from 'rxjs';
       padding: 10px;
       border-radius: 6px;
       background-color: var(--surface-secondary);
+      border: 1px solid var(--border-color);
       font-size: 12px;
     }
 
     .notif-item.unread {
-      border-left: 3px solid var(--pastel-peach);
-      background-color: #FFF8E1;
+      border-left: 3px solid var(--color-soft-blue);
+      background-color: var(--color-soft-blue-subtle);
+      border-top-color: var(--border-hover);
+      border-right-color: var(--border-hover);
+      border-bottom-color: var(--border-hover);
     }
 
     .notif-title {
       font-weight: 600;
+      color: var(--text-primary);
       margin-bottom: 2px;
     }
 
@@ -192,6 +260,7 @@ import { catchError, of } from 'rxjs';
 export class NavbarComponent implements OnInit {
   private api = inject(ApiService);
   private authService = inject(AuthService);
+  themeService = inject(ThemeService);
 
   showNotifications = signal(false);
   unreadCount = signal(0);
@@ -228,3 +297,4 @@ export class NavbarComponent implements OnInit {
       });
   }
 }
+

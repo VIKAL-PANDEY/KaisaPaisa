@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profiles",
+      "description": "User profile records and preferences",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "User email address" },
+        "name": { "type": "string", "description": "Display name" },
+        "currency": { "type": "string", "description": "Preferred currency symbol" },
+        "createdAt": { "type": "timestamp", "description": "Creation date" }
+      },
+      "required": ["email"]
+    },
+    "transactions": {
+      "title": "Transactions",
+      "description": "Financial records of income and expenses",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the owner" },
+        "type": { "type": "string", "description": "Transaction type: income or expense" },
+        "amount": { "type": "number", "description": "Amount in currency" },
+        "merchant": { "type": "string", "description": "Merchant or payee name" },
+        "description": { "type": "string", "description": "Optional note" },
+        "categoryId": { "type": "string", "description": "Category identifier" },
+        "categoryName": { "type": "string", "description": "Category display name" },
+        "accountId": { "type": "string", "description": "Account identifier" },
+        "paymentMethod": { "type": "string", "description": "Method of payment" },
+        "date": { "type": "timestamp", "description": "Transaction timestamp" }
+      },
+      "required": ["userId", "type", "amount", "merchant"]
+    },
+    "budgets": {
+      "title": "Budgets",
+      "description": "Monthly or category budget limits",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner UID" },
+        "name": { "type": "string", "description": "Budget name" },
+        "limit": { "type": "number", "description": "Budget threshold limit" },
+        "period": { "type": "string", "description": "Budget period" },
+        "categoryId": { "type": "string", "description": "Target category ID" }
+      },
+      "required": ["userId", "limit"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "entity": "users",
+      "description": "Private user profile",
+      "allow": {
+        "read": "request.auth.uid == userId",
+        "create": "request.auth.uid == userId",
+        "update": "request.auth.uid == userId",
+        "delete": "request.auth.uid == userId"
+      }
+    },
+    "/transactions/{transactionId}": {
+      "entity": "transactions",
+      "description": "User-private transactions",
+      "allow": {
+        "read": "request.auth.uid == resource.data.userId",
+        "create": "request.auth.uid == request.resource.data.userId",
+        "update": "request.auth.uid == resource.data.userId",
+        "delete": "request.auth.uid == resource.data.userId"
+      }
+    },
+    "/budgets/{budgetId}": {
+      "entity": "budgets",
+      "description": "User-private budget configurations",
+      "allow": {
+        "read": "request.auth.uid == resource.data.userId",
+        "create": "request.auth.uid == request.resource.data.userId",
+        "update": "request.auth.uid == resource.data.userId",
+        "delete": "request.auth.uid == resource.data.userId"
+      }
+    }
+  }
+}

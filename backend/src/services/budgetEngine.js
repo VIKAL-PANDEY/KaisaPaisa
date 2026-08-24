@@ -1,6 +1,14 @@
+const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
 const Budget = require('../models/Budget');
 const Notification = require('../models/Notification');
+
+const getUserMatchCondition = (userId) => {
+  if (mongoose.Types.ObjectId.isValid(userId)) {
+    return { $in: [new mongoose.Types.ObjectId(userId), userId] };
+  }
+  return userId;
+};
 
 /**
  * Calculates start and end Date objects for a given period in Asia/Kolkata context
@@ -40,13 +48,17 @@ const calculateBudgetProgress = async (userId, budget) => {
   const { start, end } = getDateRangeForPeriod(budget.period);
 
   const query = {
-    userId: userId,
+    userId: getUserMatchCondition(userId),
     type: 'expense',
     date: { $gte: start, $lte: end }
   };
 
   if (budget.period === 'category' && budget.categoryId) {
-    query.categoryId = budget.categoryId;
+    if (mongoose.Types.ObjectId.isValid(budget.categoryId)) {
+      query.categoryId = { $in: [new mongoose.Types.ObjectId(budget.categoryId), budget.categoryId] };
+    } else {
+      query.categoryId = budget.categoryId;
+    }
   }
 
   const result = await Transaction.aggregate([

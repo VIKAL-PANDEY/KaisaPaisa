@@ -69,7 +69,7 @@ export interface BudgetData {
     <div *ngIf="!compact" class="budget-tracker-card kp-card" [id]="id || ('budget-tracker-' + (_id || 'card'))">
       <div class="bc-header">
         <div class="bc-period-tag">
-          <span class="badge" [class.badge-coming-soon]="period === 'category'">
+          <span class="badge" [class.badge-normal]="period === 'category'">
             {{ (period || 'BUDGET') | uppercase }} {{ categoryName ? '• ' + categoryName : '' }}
           </span>
         </div>
@@ -252,21 +252,25 @@ export interface BudgetData {
       font-size: 11px;
       padding: 3px 8px;
       border-radius: 12px;
+      border: 1px solid transparent;
     }
 
     .status-normal {
       background-color: var(--bg-income-light);
       color: var(--color-income);
+      border-color: rgba(151, 185, 255, 0.20);
     }
 
     .status-warning {
       background-color: var(--bg-warning-light);
       color: var(--color-warning);
+      border-color: rgba(255, 183, 77, 0.20);
     }
 
     .status-exceeded {
       background-color: var(--bg-expense-light);
       color: var(--color-expense);
+      border-color: rgba(229, 115, 115, 0.20);
     }
 
     .rem-text {
@@ -287,7 +291,7 @@ export interface BudgetData {
       align-items: center;
       gap: 8px;
       font-size: 12px;
-      padding: 6px 10px;
+      padding: 8px 12px;
       border-radius: var(--radius-input);
       font-weight: 500;
     }
@@ -295,13 +299,13 @@ export interface BudgetData {
     .alert-exceeded {
       background-color: var(--bg-expense-light);
       color: var(--color-expense);
-      border: 1px solid #FFCDD2;
+      border: 1px solid rgba(229, 115, 115, 0.25);
     }
 
     .alert-warning {
       background-color: var(--bg-warning-light);
       color: var(--color-warning);
-      border: 1px solid #FFCCBC;
+      border: 1px solid rgba(255, 183, 77, 0.25);
     }
 
     .alert-icon {

@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
+const connectDB = require('./config/db');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -51,7 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 // General API Rate Limiter
 app.use('/api', apiLimiter);
 
-// Health Check Endpoint
+// Health Check Endpoint (does not require DB)
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'online',
@@ -59,6 +60,21 @@ app.get('/api/health', (req, res) => {
     tagline: 'Know your money. Control your spending.',
     timestamp: new Date().toISOString()
   });
+});
+
+// Database Readiness Middleware for all API Routes
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('[Database Middleware Error]:', err.message);
+    return res.status(503).json({
+      success: false,
+      message: 'Database initialization is in progress or temporarily unavailable. Please retry in a few moments.',
+      error: err.message
+    });
+  }
 });
 
 // API Routes
@@ -73,22 +89,6 @@ app.use('/api/goals', goalRoutes);
 app.use('/api/recurring-expenses', recurringRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/reports', reportRoutes);
-
-// Fallback error handler for Mongoose / MongoDB offline
-app.use((err, req, res, next) => {
-  if (
-    err.name === 'MongooseError' ||
-    err.name === 'MongoNetworkError' ||
-    (err.message && err.message.includes('buffering timed out'))
-  ) {
-    console.warn('[KAISAPAISA] Database offline fallback triggered:', err.message);
-    if (req.method === 'GET') {
-      return res.json(req.path.endsWith('s') || req.path.endsWith('s/') ? [] : {});
-    }
-    return res.status(503).json({ error: 'Service temporarily unavailable (database offline)' });
-  }
-  next(err);
-});
 
 // API Error Handler
 app.use('/api', errorHandler);

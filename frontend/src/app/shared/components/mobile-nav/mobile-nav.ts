@@ -33,8 +33,10 @@ import { RouterModule } from '@angular/router';
       left: 0;
       right: 0;
       height: 60px;
-      background-color: var(--surface-white);
+      background: var(--glass-sidebar-bg);
       border-top: 1px solid var(--border-color);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       z-index: 999;
       justify-content: space-around;
       align-items: center;
@@ -55,9 +57,10 @@ import { RouterModule } from '@angular/router';
     }
 
     .mn-item.active {
-      color: var(--text-primary);
+      color: var(--color-primary);
       font-weight: 700;
-      border-top: 2px solid var(--text-primary);
+      border-top: 2px solid var(--color-soft-blue);
+      background: var(--color-primary-subtle);
     }
 
     @media (max-width: 768px) {

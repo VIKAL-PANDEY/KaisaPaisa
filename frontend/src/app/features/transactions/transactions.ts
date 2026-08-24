@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ApiService } from '../../core/services/api.service';
+import { FirebaseService } from '../../core/services/firebase.service';
+import { TransactionEventService } from '../../core/services/transaction-event.service';
 
 @Component({
   selector: 'app-transactions',
@@ -16,9 +18,25 @@ import { ApiService } from '../../core/services/api.service';
           <h1 class="page-title">Transactions</h1>
           <p class="page-subtitle">Track, filter, and search your income and expense history in real time.</p>
         </div>
-        <button id="add-transaction-btn" (click)="openAddModal()" class="btn btn-primary">
-          + Add Transaction
-        </button>
+        <div class="header-actions">
+          <button 
+            id="export-transactions-csv-btn" 
+            (click)="exportFilteredToCSV()" 
+            class="btn btn-secondary export-csv-btn"
+            [disabled]="transactions().length === 0"
+            title="Export filtered transactions as CSV"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Export CSV</span>
+          </button>
+          <button id="add-transaction-btn" (click)="openAddModal()" class="btn btn-primary">
+            + Add Transaction
+          </button>
+        </div>
       </div>
 
       <!-- Enhanced Search and Filter Bar -->
@@ -201,7 +219,7 @@ import { ApiService } from '../../core/services/api.service';
                 <button 
                   type="button" 
                   [class.active-type-expense]="formData.type === 'expense'"
-                  (click)="formData.type = 'expense'"
+                  (click)="setModalType('expense')"
                   class="toggle-btn"
                 >
                   Expense
@@ -209,7 +227,7 @@ import { ApiService } from '../../core/services/api.service';
                 <button 
                   type="button" 
                   [class.active-type-income]="formData.type === 'income'"
-                  (click)="formData.type = 'income'"
+                  (click)="setModalType('income')"
                   class="toggle-btn"
                 >
                   Income
@@ -225,6 +243,7 @@ import { ApiService } from '../../core/services/api.service';
             <div class="form-group">
               <label class="form-label">Category</label>
               <select [(ngModel)]="formData.categoryId" name="categoryId" class="form-control" required>
+                <option value="" disabled>Select a category</option>
                 <option *ngFor="let c of filteredCategoriesForModal()" [value]="c._id">{{ c.name }}</option>
               </select>
             </div>
@@ -232,6 +251,7 @@ import { ApiService } from '../../core/services/api.service';
             <div class="form-group">
               <label class="form-label">Account</label>
               <select [(ngModel)]="formData.accountId" name="accountId" class="form-control">
+                <option value="">Select an account</option>
                 <option *ngFor="let a of accounts()" [value]="a._id">{{ a.name }}</option>
               </select>
             </div>
@@ -285,6 +305,26 @@ import { ApiService } from '../../core/services/api.service';
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .export-csv-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .export-csv-btn:hover:not(:disabled) {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
     }
 
     .filters-card {
@@ -327,8 +367,8 @@ import { ApiService } from '../../core/services/api.service';
     }
 
     .main-search-input:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.15);
+      border-color: var(--color-soft-blue);
+      box-shadow: 0 0 0 2px var(--color-primary-subtle);
     }
 
     .clear-search-btn {
@@ -398,15 +438,17 @@ import { ApiService } from '../../core/services/api.service';
     }
 
     .category-chip:hover {
-      background: var(--border-color);
+      background: var(--surface-elevated);
       color: var(--text-primary);
+      border-color: var(--border-hover);
     }
 
     .category-chip.active-chip {
-      background: #E8F0EB;
-      border-color: #4A7C59;
-      color: #2D5A3C;
+      background: var(--color-primary);
+      border-color: rgba(151, 185, 255, 0.35);
+      color: #FFFFFF;
       font-weight: 600;
+      box-shadow: 0 2px 8px rgba(38, 34, 98, 0.4);
     }
 
     .chip-dot {
@@ -463,7 +505,7 @@ import { ApiService } from '../../core/services/api.service';
     .btn-clear-all {
       background: none;
       border: none;
-      color: #4A7C59;
+      color: var(--color-soft-blue);
       font-weight: 600;
       font-size: 12px;
       cursor: pointer;
@@ -485,12 +527,12 @@ import { ApiService } from '../../core/services/api.service';
       overflow: hidden;
     }
 
-    .tx-title { font-weight: 600; font-size: 14px; }
+    .tx-title { font-weight: 600; font-size: 14px; color: var(--text-primary); }
     .tx-desc { font-size: 11.5px; color: var(--text-secondary); }
     .font-bold { font-weight: 700; }
     .text-right { text-align: right; }
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
+    .text-sage { color: var(--color-income); }
+    .text-peach { color: var(--color-expense); }
 
     .action-btn {
       background: none;
@@ -523,8 +565,8 @@ import { ApiService } from '../../core/services/api.service';
       cursor: pointer;
     }
 
-    .active-type-expense { background-color: var(--pastel-peach); color: #C62828; }
-    .active-type-income { background-color: var(--pastel-sage); color: #2E7D32; }
+    .active-type-expense { background-color: var(--bg-expense-light); color: var(--color-expense); border: 1px solid rgba(220, 38, 38, 0.25); }
+    .active-type-income { background-color: var(--bg-income-light); color: var(--color-income); border: 1px solid rgba(22, 163, 74, 0.25); }
 
     .form-row {
       display: flex;
@@ -586,6 +628,8 @@ import { ApiService } from '../../core/services/api.service';
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
   private api = inject(ApiService);
+  private firebaseService = inject(FirebaseService);
+  private txEvents = inject(TransactionEventService);
 
   transactions = signal<any[]>([]);
   categories = signal<any[]>([]);
@@ -706,13 +750,22 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     return this.categories().filter(c => c.type === this.formData.type);
   }
 
+  setModalType(type: string) {
+    this.formData.type = type;
+    const cats = this.categories().filter(c => c.type === type);
+    if (cats.length > 0) {
+      this.formData.categoryId = cats[0]._id;
+    }
+  }
+
   openAddModal() {
     this.isEditing.set(false);
+    const expenseCats = this.categories().filter(c => c.type === 'expense');
     this.formData = {
       _id: null,
       type: 'expense',
       amount: null,
-      categoryId: this.categories().length > 0 ? this.categories()[0]._id : '',
+      categoryId: expenseCats.length > 0 ? expenseCats[0]._id : (this.categories().length > 0 ? this.categories()[0]._id : ''),
       accountId: this.accounts().length > 0 ? this.accounts()[0]._id : '',
       merchant: '',
       description: '',
@@ -744,13 +797,19 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         next: () => {
           this.closeModal();
           this.loadTransactions();
+          this.txEvents.notifyTransactionUpdated();
         }
       });
     } else {
       this.api.post('transactions', this.formData).subscribe({
-        next: () => {
+        next: (res: any) => {
           this.closeModal();
           this.loadTransactions();
+          this.txEvents.notifyTransactionUpdated();
+          // Backup transaction to Firestore for user
+          if (this.firebaseService.getCurrentUser()) {
+            this.firebaseService.saveTransaction(this.formData);
+          }
         }
       });
     }
@@ -759,9 +818,43 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   deleteTransaction(id: string) {
     if (confirm('Are you sure you want to delete this transaction?')) {
       this.api.delete(`transactions/${id}`).subscribe({
-        next: () => this.loadTransactions()
+        next: () => {
+          this.loadTransactions();
+          this.txEvents.notifyTransactionUpdated();
+        }
       });
     }
+  }
+
+  exportFilteredToCSV() {
+    const list = this.transactions();
+    if (!list || list.length === 0) return;
+
+    const headers = ['Date', 'Type', 'Merchant/Title', 'Category', 'Account', 'Payment Method', 'Amount (INR)', 'Description'];
+    const rows = list.map(tx => {
+      const dateStr = tx.date ? new Date(tx.date).toISOString().substring(0, 10) : '';
+      const typeStr = (tx.type || 'expense').toUpperCase();
+      const merchantStr = `"${(tx.merchant || '').replace(/"/g, '""')}"`;
+      const categoryStr = `"${(tx.categoryName || '').replace(/"/g, '""')}"`;
+      const accountStr = `"${(tx.accountName || '').replace(/"/g, '""')}"`;
+      const paymentStr = `"${(tx.paymentMethod || '').replace(/"/g, '""')}"`;
+      const amountVal = tx.amount != null ? Number(tx.amount).toFixed(2) : '0.00';
+      const descStr = `"${(tx.description || '').replace(/"/g, '""')}"`;
+
+      return [dateStr, typeStr, merchantStr, categoryStr, accountStr, paymentStr, amountVal, descStr].join(',');
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', url);
+    const dateStamp = new Date().toISOString().substring(0, 10);
+    downloadAnchor.setAttribute('download', `kaisapaisa_transactions_${dateStamp}.csv`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
+    URL.revokeObjectURL(url);
   }
 
   closeModal() {

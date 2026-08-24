@@ -116,10 +116,10 @@ Chart.register(...registerables);
     }
 
     .stat-label { font-size: 13px; color: var(--text-secondary); }
-    .stat-value { font-size: 26px; font-weight: 700; margin: 6px 0; }
+    .stat-value { font-size: 26px; font-weight: 700; color: var(--text-primary); margin: 6px 0; }
     .stat-subtext { font-size: 12px; color: var(--text-muted); }
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
+    .text-sage { color: var(--color-soft-blue); }
+    .text-peach { color: var(--color-expense); }
 
     .charts-row {
       display: grid;
@@ -131,7 +131,7 @@ Chart.register(...registerables);
       .charts-row { grid-template-columns: 1fr; }
     }
 
-    .chart-box h3 { font-size: 16px; margin-bottom: 12px; }
+    .chart-box h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 12px; }
 
     .canvas-wrapper {
       position: relative;
@@ -139,23 +139,24 @@ Chart.register(...registerables);
     }
 
     .table-card { padding: 20px; }
-    .table-card h3 { font-size: 16px; margin-bottom: 14px; }
+    .table-card h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 14px; }
 
-    .font-bold { font-weight: 600; }
+    .font-bold { font-weight: 600; color: var(--text-primary); }
 
     .progress-row {
       display: flex;
       align-items: center;
       gap: 12px;
       font-size: 13px;
+      color: var(--text-secondary);
     }
 
     .flex-1 { flex: 1; }
 
-    .insights-box h3 { font-size: 16px; margin-bottom: 14px; }
+    .insights-box h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 14px; }
     .insights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .insight-card { background-color: var(--surface-secondary); border-left: 4px solid var(--pastel-blue); }
-    .ic-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .insight-card { background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--color-soft-blue); }
+    .ic-title { font-weight: 600; font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
     .ic-msg { font-size: 13px; color: var(--text-secondary); }
   `]
 })
@@ -219,11 +220,43 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         data: {
           labels: this.trendsData().map(t => t.month),
           datasets: [
-            { label: 'Income', data: this.trendsData().map(t => t.income), borderColor: '#2E7D32', backgroundColor: '#A8C3B0', tension: 0.3 },
-            { label: 'Expenses', data: this.trendsData().map(t => t.expense), borderColor: '#C62828', backgroundColor: '#E8B7A6', tension: 0.3 }
+            { 
+              label: 'Income', 
+              data: this.trendsData().map(t => t.income), 
+              borderColor: '#97B9FF', 
+              backgroundColor: 'rgba(151, 185, 255, 0.15)', 
+              fill: true,
+              tension: 0.3 
+            },
+            { 
+              label: 'Expenses', 
+              data: this.trendsData().map(t => t.expense), 
+              borderColor: '#262262', 
+              backgroundColor: 'rgba(38, 34, 98, 0.35)', 
+              fill: true,
+              tension: 0.3 
+            }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 12 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            }
+          }
+        }
       });
     }
 
@@ -233,9 +266,32 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
         type: 'bar',
         data: {
           labels: this.categories().map(c => c.category),
-          datasets: [{ label: 'Amount (₹)', data: this.categories().map(c => c.amount), backgroundColor: '#A9BDD2', borderRadius: 4 }]
+          datasets: [{ 
+            label: 'Amount (₹)', 
+            data: this.categories().map(c => c.amount), 
+            backgroundColor: '#97B9FF', 
+            borderRadius: 4 
+          }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 12 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+            }
+          }
+        }
       });
     }
   }

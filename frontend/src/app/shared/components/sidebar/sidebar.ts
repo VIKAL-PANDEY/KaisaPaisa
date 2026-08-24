@@ -45,9 +45,6 @@ import { AuthService } from '../../../core/services/auth.service';
         <a routerLink="/debt-lending" routerLinkActive="active" class="nav-item">
           <span>Debt & Lending</span>
         </a>
-        <a routerLink="/accounts" routerLinkActive="active" class="nav-item">
-          <span>Accounts</span>
-        </a>
         <a routerLink="/reports" routerLinkActive="active" class="nav-item">
           <span>Reports</span>
         </a>
@@ -55,16 +52,6 @@ import { AuthService } from '../../../core/services/auth.service';
         <div class="nav-section-title">PERSONAL</div>
         <a routerLink="/settings" routerLinkActive="active" class="nav-item">
           <span>Settings & Profile</span>
-        </a>
-
-        <div class="nav-section-title">COMING SOON</div>
-        <a routerLink="/coming-soon/ai-assistant" class="nav-item coming-soon-item">
-          <span>AI Assistant</span>
-          <span class="cs-badge">SOON</span>
-        </a>
-        <a routerLink="/coming-soon/student-deals" class="nav-item coming-soon-item">
-          <span>Student Deals</span>
-          <span class="cs-badge">SOON</span>
         </a>
       </nav>
 
@@ -89,14 +76,17 @@ import { AuthService } from '../../../core/services/auth.service';
   styles: [`
     .sidebar {
       width: 260px;
-      background-color: var(--surface-white);
+      background: var(--glass-sidebar-bg);
       border-right: 1px solid var(--border-color);
+      backdrop-filter: var(--glass-blur-strong);
+      -webkit-backdrop-filter: var(--glass-blur-strong);
       display: flex;
       flex-direction: column;
       height: 100vh;
       position: sticky;
       top: 0;
       padding: 24px 16px;
+      z-index: 50;
     }
 
     .brand {
@@ -115,13 +105,14 @@ import { AuthService } from '../../../core/services/auth.service';
       border-radius: 9px;
       background-color: #FFFFFF;
       padding: 2px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
     .brand-title {
       font-size: 16px;
       font-weight: 800;
       letter-spacing: -0.02em;
+      color: var(--text-primary);
     }
 
     .brand-tagline {
@@ -157,31 +148,23 @@ import { AuthService } from '../../../core/services/auth.service';
       color: var(--text-secondary);
       text-decoration: none;
       border-radius: var(--radius-btn);
+      border: 1px solid transparent;
       transition: var(--transition-fast);
     }
 
     .nav-item:hover {
       background-color: var(--surface-secondary);
       color: var(--text-primary);
+      border-color: var(--border-hover);
     }
 
     .nav-item.active {
-      background-color: var(--bg-main);
-      color: var(--text-primary);
+      background-color: var(--color-primary);
+      background-image: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+      color: #FFFFFF;
       font-weight: 600;
-    }
-
-    .coming-soon-item {
-      opacity: 0.8;
-    }
-
-    .cs-badge {
-      font-size: 9px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background-color: #EDE7F6;
-      color: #512DA8;
+      border: 1px solid rgba(151, 185, 255, 0.25);
+      box-shadow: 0 2px 10px rgba(38, 34, 98, 0.35);
     }
 
     .sidebar-footer {
@@ -203,8 +186,9 @@ import { AuthService } from '../../../core/services/auth.service';
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background-color: var(--pastel-sage);
-      color: var(--text-primary);
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      border: 1px solid rgba(151, 185, 255, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,6 +210,7 @@ import { AuthService } from '../../../core/services/auth.service';
     .user-name {
       font-size: 13px;
       font-weight: 600;
+      color: var(--text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -240,19 +225,21 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .logout-btn {
-      background: none;
-      border: none;
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-color);
       color: var(--text-secondary);
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
       padding: 4px 8px;
       border-radius: 6px;
+      transition: var(--transition-fast);
     }
 
     .logout-btn:hover {
       background-color: var(--bg-expense-light);
       color: var(--color-expense);
+      border-color: rgba(229, 115, 115, 0.3);
     }
 
     @media (max-width: 768px) {

@@ -54,7 +54,7 @@ import { ApiService } from '../../core/services/api.service';
             <tbody>
               <tr *ngFor="let item of recurringItems()">
                 <td class="font-bold">{{ item.name }}</td>
-                <td><span class="badge badge-coming-soon">{{ item.categoryName }}</span></td>
+                <td><span class="badge badge-normal">{{ item.categoryName }}</span></td>
                 <td>{{ item.frequency | titlecase }}</td>
                 <td>{{ item.nextDueDate | date:'mediumDate' }}</td>
                 <td>
@@ -131,22 +131,22 @@ import { ApiService } from '../../core/services/api.service';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-left: 4px solid var(--pastel-yellow);
+      border-left: 4px solid var(--color-primary);
     }
 
     .cc-label { font-size: 13px; color: var(--text-secondary); }
-    .cc-value { font-size: 26px; font-weight: 700; margin-top: 2px; }
+    .cc-value { font-size: 26px; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
 
     .table-card { padding: 0; overflow: hidden; }
-    .font-bold { font-weight: 600; }
-    .text-peach { color: #C62828; }
+    .font-bold { font-weight: 600; color: var(--text-primary); }
+    .text-peach { color: var(--color-expense); }
     .text-right { text-align: right; }
 
     .status-chip { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; }
-    .chip-active { background-color: #E8F5E9; color: #2E7D32; }
-    .chip-inactive { background-color: #ECEFF1; color: var(--text-muted); }
+    .chip-active { background-color: var(--bg-income-light); color: var(--color-income); border: 1px solid rgba(151, 185, 255, 0.2); }
+    .chip-inactive { background-color: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-color); }
 
-    .action-btn { background: none; border: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .action-btn { background: none; border: none; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-secondary); }
     .action-btn.text-danger:hover { color: var(--color-expense); }
 
     .empty-state { text-align: center; padding: 48px 20px; }

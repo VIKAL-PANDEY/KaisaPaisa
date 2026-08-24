@@ -159,15 +159,16 @@ import { ApiService } from '../../core/services/api.service';
     .gc-desc { font-size: 13px; color: var(--text-secondary); }
 
     .gc-amounts { display: flex; align-items: baseline; gap: 6px; }
-    .curr-val { font-size: 24px; font-weight: 700; color: #2E7D32; }
+    .curr-val { font-size: 24px; font-weight: 700; color: var(--color-soft-blue); }
     .target-val { font-size: 14px; color: var(--text-secondary); }
 
     .gc-meta { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; }
-    .pct-badge { font-weight: 700; color: var(--text-primary); background-color: #EDE7F6; padding: 2px 8px; border-radius: 10px; }
+    .pct-badge { font-weight: 700; color: var(--color-soft-blue); background-color: var(--bg-income-light); border: 1px solid rgba(151, 185, 255, 0.2); padding: 2px 8px; border-radius: 10px; }
     .rem-text { color: var(--text-secondary); }
 
     .req-savings-box {
-      background-color: var(--surface-secondary);
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 12px;
       display: flex;

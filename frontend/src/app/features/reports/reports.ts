@@ -163,18 +163,18 @@ import { ApiService } from '../../core/services/api.service';
     }
 
     .stat-label { font-size: 12.5px; color: var(--text-secondary); }
-    .stat-value { font-size: 24px; font-weight: 700; margin-top: 4px; }
-    .border-sage { border-left: 4px solid var(--pastel-sage); }
-    .border-peach { border-left: 4px solid var(--pastel-peach); }
-    .border-blue { border-left: 4px solid var(--pastel-blue); }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-top: 4px; }
+    .border-sage { border-left: 4px solid var(--color-soft-blue); }
+    .border-peach { border-left: 4px solid var(--color-expense); }
+    .border-blue { border-left: 4px solid var(--color-primary); }
 
-    .text-sage { color: #2E7D32; }
-    .text-peach { color: #C62828; }
-    .font-bold { font-weight: 600; }
+    .text-sage { color: var(--color-soft-blue); }
+    .text-peach { color: var(--color-expense); }
+    .font-bold { font-weight: 600; color: var(--text-primary); }
     .text-right { text-align: right; }
     .mt-4 { margin-top: 20px; }
     .table-card { padding: 20px; }
-    .card-header h3 { font-size: 16px; margin-bottom: 12px; }
+    .card-header h3 { font-size: 16px; color: var(--text-primary); margin-bottom: 12px; }
   `]
 })
 export class ReportsComponent implements OnInit {
