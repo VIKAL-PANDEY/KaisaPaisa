@@ -47,8 +47,10 @@ import { RouterModule } from '@angular/router';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 0.70rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--text-secondary);
       text-decoration: none;
       width: 20%;
@@ -57,10 +59,10 @@ import { RouterModule } from '@angular/router';
     }
 
     .mn-item.active {
-      color: var(--color-primary);
+      color: #C89B7B;
       font-weight: 700;
-      border-top: 2px solid var(--color-soft-blue);
-      background: var(--color-primary-subtle);
+      border-top: 2px solid #C89B7B;
+      background: rgba(200, 155, 123, 0.12);
     }
 
     @media (max-width: 768px) {

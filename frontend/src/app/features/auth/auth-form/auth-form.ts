@@ -258,10 +258,10 @@ import { catchError, of } from 'rxjs';
       align-items: center;
       justify-content: center;
       padding: 40px 16px;
-      background: radial-gradient(ellipse at 50% 15%, rgba(38, 34, 98, 0.5) 0%, #141414 75%);
-      color: #E4E4E7;
+      background: radial-gradient(ellipse at 50% 15%, rgba(200, 155, 123, 0.12) 0%, #121417 80%);
+      color: #F8F9FA;
       overflow-x: hidden;
-      font-family: inherit;
+      font-family: var(--font-sans);
     }
 
     .back-btn-wrapper {
@@ -277,12 +277,12 @@ import { catchError, of } from 'rxjs';
       width: 100%;
       max-width: 480px;
       padding: 40px 36px;
-      background: rgba(24, 24, 27, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #20242B;
+      border: 1px solid rgba(200, 155, 123, 0.25);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(200, 155, 123, 0.15);
       animation: authCardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
@@ -311,17 +311,18 @@ import { catchError, of } from 'rxjs';
       height: 42px;
       object-fit: contain;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(200, 155, 123, 0.1);
+      border: 1px solid rgba(200, 155, 123, 0.3);
       padding: 4px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
 
     .auth-brand-name {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #FFFFFF;
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #F8F9FA;
     }
 
     /* Header */
@@ -331,28 +332,29 @@ import { catchError, of } from 'rxjs';
     }
 
     .auth-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: -0.02em;
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 600;
+      color: #F8F9FA;
+      letter-spacing: -0.01em;
       margin: 0 0 8px 0;
     }
 
     .auth-subtitle {
       font-size: 14px;
-      color: #A1A1AA;
+      color: #9CA3AF;
       margin: 0;
     }
 
     .auth-toggle-link {
-      color: #60A5FA;
+      color: #C89B7B;
       font-weight: 600;
       text-decoration: none;
       transition: color 0.15s ease;
     }
 
     .auth-toggle-link:hover {
-      color: #93C5FD;
+      color: #B88665;
       text-decoration: underline;
     }
 
@@ -377,12 +379,12 @@ import { catchError, of } from 'rxjs';
       gap: 10px;
       overflow: hidden;
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(200, 155, 123, 0.25);
+      background: #181B20;
       padding: 10px 16px;
       font-size: 14px;
       font-weight: 600;
-      color: #E4E4E7;
+      color: #F8F9FA;
       cursor: pointer;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
@@ -395,15 +397,15 @@ import { catchError, of } from 'rxjs';
       inset: 0;
       z-index: -1;
       border-radius: 100%;
-      background: #FFFFFF;
+      background: #C89B7B;
       transform: translate(150%, 150%) scale(2.5);
       transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .social-btn:hover:not(:disabled) {
       transform: scale(1.02);
-      color: #09090B;
-      border-color: rgba(255, 255, 255, 0.4);
+      color: #121417;
+      border-color: #C89B7B;
     }
 
     .social-btn:hover:not(:disabled)::before {
@@ -422,7 +424,7 @@ import { catchError, of } from 'rxjs';
     .back-btn {
       padding: 8px 14px;
       font-size: 13px;
-      background: rgba(24, 24, 27, 0.7);
+      background: #181B20;
     }
 
     /* Divider */
@@ -436,14 +438,14 @@ import { catchError, of } from 'rxjs';
     .divider-line {
       flex: 1;
       height: 1px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(200, 155, 123, 0.2);
     }
 
     .divider-text {
       font-size: 12px;
       font-weight: 700;
-      color: #71717A;
-      letter-spacing: 0.05em;
+      color: #9CA3AF;
+      letter-spacing: 0.08em;
     }
 
     /* Form Fields */
@@ -460,8 +462,8 @@ import { catchError, of } from 'rxjs';
 
     .field-label {
       font-size: 13px;
-      font-weight: 500;
-      color: #A1A1AA;
+      font-weight: 600;
+      color: #9CA3AF;
       margin-bottom: 6px;
     }
 
@@ -474,7 +476,7 @@ import { catchError, of } from 'rxjs';
 
     .forgot-link {
       font-size: 12.5px;
-      color: #60A5FA;
+      color: #C89B7B;
       text-decoration: none;
       font-weight: 500;
     }
@@ -486,45 +488,46 @@ import { catchError, of } from 'rxjs';
     .form-input-field {
       width: 100%;
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(200, 155, 123, 0.25);
+      background: #181B20;
       padding: 11px 14px;
       font-size: 14px;
-      color: #FFFFFF;
+      color: #F8F9FA;
       outline: none;
       transition: all 0.2s ease;
       box-sizing: border-box;
     }
 
     .form-input-field::placeholder {
-      color: #52525B;
+      color: #6B7280;
     }
 
     .form-input-field:focus {
-      border-color: #3B82F6;
-      background: rgba(255, 255, 255, 0.07);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      border-color: #C89B7B;
+      background: #181B20;
+      box-shadow: 0 0 0 3px rgba(200, 155, 123, 0.2);
     }
 
-    /* Gradient Submit Button */
+    /* Primary Hero Action CTA Button */
     .btn-auth-gradient {
       width: 100%;
       margin-top: 6px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #60A5FA 0%, #2563EB 55%, #1D4ED8 100%);
+      background: #FFFFFF;
       padding: 12px 18px;
       font-size: 15px;
-      font-weight: 600;
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-weight: 700;
+      color: #121417;
+      border: 1px solid #FFFFFF;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-auth-gradient:hover:not(:disabled) {
-      transform: scale(1.02);
-      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+      transform: scale(1.01);
+      background: #F8F9FA;
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
     }
 
     .btn-auth-gradient:active:not(:disabled) {
@@ -549,12 +552,12 @@ import { catchError, of } from 'rxjs';
       margin-bottom: 0;
       text-align: center;
       font-size: 12px;
-      color: #71717A;
+      color: #9CA3AF;
       line-height: 1.5;
     }
 
     .terms-link {
-      color: #60A5FA;
+      color: #C89B7B;
       text-decoration: none;
       font-weight: 500;
     }

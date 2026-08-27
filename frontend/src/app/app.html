@@ -1,4 +1,8 @@
 <ng-container *ngIf="authService.isAuthenticated(); else authLayout">
+  <div class="top-alert-banner">
+    <span class="accent-tag">EDITORIAL LUXURY</span>
+    <span>KAISAPAISA — KNOW YOUR MONEY. CONTROL YOUR SPENDING.</span>
+  </div>
   <div class="app-container">
     <app-sidebar></app-sidebar>
     <main class="main-content">
@@ -10,5 +14,9 @@
 </ng-container>
 
 <ng-template #authLayout>
+  <div class="top-alert-banner">
+    <span class="accent-tag">EDITORIAL LUXURY</span>
+    <span>KAISAPAISA — KNOW YOUR MONEY. CONTROL YOUR SPENDING.</span>
+  </div>
   <router-outlet></router-outlet>
 </ng-template>

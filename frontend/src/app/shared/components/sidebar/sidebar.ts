@@ -109,15 +109,18 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .brand-title {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       color: var(--text-primary);
     }
 
     .brand-tagline {
       font-size: 11px;
       color: var(--text-secondary);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     .nav-menu {
@@ -129,11 +132,12 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .nav-section-title {
-      font-size: 10px;
+      font-size: 0.70rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-top: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-terracotta);
+      margin-top: 16px;
       margin-bottom: 6px;
       padding-left: 10px;
     }
@@ -142,9 +146,11 @@ import { AuthService } from '../../../core/services/auth.service';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 12px;
-      font-size: 13.5px;
-      font-weight: 500;
+      padding: 9px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--text-secondary);
       text-decoration: none;
       border-radius: var(--radius-btn);
@@ -153,18 +159,18 @@ import { AuthService } from '../../../core/services/auth.service';
     }
 
     .nav-item:hover {
-      background-color: var(--surface-secondary);
+      background-color: var(--surface-elevated);
       color: var(--text-primary);
       border-color: var(--border-hover);
     }
 
     .nav-item.active {
-      background-color: var(--color-primary);
-      background-image: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-      color: #FFFFFF;
-      font-weight: 600;
-      border: 1px solid rgba(151, 185, 255, 0.25);
-      box-shadow: 0 2px 10px rgba(38, 34, 98, 0.35);
+      background-color: #C89B7B;
+      background-image: linear-gradient(135deg, #C89B7B 0%, #B88665 100%);
+      color: #121417;
+      font-weight: 700;
+      border: 1px solid rgba(200, 155, 123, 0.4);
+      box-shadow: 0 2px 12px rgba(200, 155, 123, 0.25);
     }
 
     .sidebar-footer {

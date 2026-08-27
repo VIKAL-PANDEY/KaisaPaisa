@@ -91,9 +91,10 @@ import { catchError, of } from 'rxjs';
     }
 
     .app-mobile-logo {
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: -0.02em;
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.05em;
       color: var(--text-primary);
       display: none;
     }

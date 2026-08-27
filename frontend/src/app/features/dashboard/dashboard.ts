@@ -165,13 +165,15 @@ Chart.register(...registerables);
     }
 
     .month-badge {
-      background-color: var(--surface-secondary);
-      border: 1px solid var(--border-color);
-      padding: 6px 14px;
+      background-color: rgba(200, 155, 123, 0.12);
+      border: 1px solid rgba(200, 155, 123, 0.3);
+      padding: 6px 16px;
       border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #C89B7B;
       backdrop-filter: var(--glass-blur);
     }
 
@@ -189,20 +191,23 @@ Chart.register(...registerables);
 
     .border-sage { border-left: 4px solid var(--color-income); }
     .border-peach { border-left: 4px solid var(--color-expense); }
-    .border-blue { border-left: 4px solid var(--color-primary); }
+    .border-blue { border-left: 4px solid #C89B7B; }
 
     .stat-label {
-      font-size: 12.5px;
-      font-weight: 500;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--text-secondary);
     }
 
     .stat-value {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text-primary);
       margin: 8px 0;
+      font-family: var(--font-sans);
     }
 
     .stat-subtext {
@@ -475,13 +480,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
             {
               label: 'Income',
               data: incomeVals,
-              backgroundColor: '#97B9FF',
+              backgroundColor: '#C89B7B',
               borderRadius: 4
             },
             {
               label: 'Expenses',
               data: expenseVals,
-              backgroundColor: '#262262',
+              backgroundColor: '#B88665',
               borderRadius: 4
             }
           ]
@@ -492,17 +497,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           plugins: { 
             legend: { 
               position: 'top',
-              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 12 } }
+              labels: { color: '#9CA3AF', font: { family: 'Plus Jakarta Sans', size: 12 } }
             } 
           },
           scales: {
             x: { 
               grid: { display: false },
-              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+              ticks: { color: '#9CA3AF', font: { family: 'Plus Jakarta Sans', size: 11 } }
             },
             y: { 
-              grid: { color: 'rgba(255, 255, 255, 0.08)' },
-              ticks: { color: '#777777', font: { family: 'Inter', size: 11 } }
+              grid: { color: 'rgba(200, 155, 123, 0.12)' },
+              ticks: { color: '#9CA3AF', font: { family: 'Plus Jakarta Sans', size: 11 } }
             }
           }
         }
@@ -520,9 +525,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           labels,
           datasets: [{
             data: dataVals,
-            backgroundColor: ['#262262', '#97B9FF', '#4B45A1', '#6B6B6B', '#38337F', '#7E9CD8'],
+            backgroundColor: ['#C89B7B', '#B88665', '#34D399', '#A78BFA', '#F87171', '#9CA3AF'],
             borderWidth: 2,
-            borderColor: '#141414'
+            borderColor: '#20242B'
           }]
         },
         options: {
@@ -531,7 +536,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           plugins: { 
             legend: { 
               position: 'right',
-              labels: { color: '#A6A6A6', font: { family: 'Inter', size: 11 }, boxWidth: 12 }
+              labels: { color: '#9CA3AF', font: { family: 'Plus Jakarta Sans', size: 11 }, boxWidth: 12 }
             } 
           }
         }
